@@ -5,5 +5,5 @@ This is the final project for the Advanced Topics in Web Application Development
 ## Group Members
 
 * Itamar Priel
-* Chen Turgeman
-* Sagi Linshits
+* Johnatan Hallel
+* Itay Beresi
