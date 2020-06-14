@@ -25,30 +25,89 @@ const scrape = got.extend({
     ]
 });
 
-async function render(url) {
-    return Nightmare()
+async function render(url, clickElem, wait) {
+    let nightmare = Nightmare()
         .goto(url)
-        .wait('body')
+        .wait(1000)
+        .wait('body');
+    if (clickElem)
+        nightmare = nightmare.click(clickElem);
+    if (wait)
+        nightmare = nightmare.wait(wait);
+
+    return nightmare
         .evaluate(() => document.querySelector('body').innerHTML)
         .end()
         .then(res => cheerio.load(res));
 }
 
-function url(host, path) {
+function stripUrlParams(url) {
+    if (url.includes('?'))
+        url = url.slice(0, url.indexOf('?'))
+
+    return url;
+}
+
+function urlBuilder(host, path) {
+    path = stripUrlParams(path);
     if (host.endsWith('/') && path.startsWith('/'))
         host = host.slice(0, -1);
 
     return host + path;
 }
 
+function sanitizeFileName(name) {
+    return name.replace(/[\/<>:*?"|]/g, match => {
+        let replace = match;
+        switch (match) {
+            case '\\':
+                replace = ' - ';
+                break;
+            case '/':
+                replace = ' - ';
+                break;
+            case '<':
+                replace = '[';
+                break;
+            case '>':
+                replace = ']';
+                break;
+            case ':':
+                replace = '-';
+                break;
+            case '*':
+                replace = '';
+                break;
+            case '?':
+                replace = '';
+                break;
+            case '\"':
+                replace = "''";
+                break;
+            case '|':
+                replace = ' - ';
+                break;
+        }
+        return replace;
+    });
+}
+
+function arrayFilterUnique(arr, key) {
+    const map = arr.reduce((map, val) => {
+        const prop = key ? val[key] : val;
+        if (!map.hasOwnProperty(prop))
+            map[prop] = val;
+        return map;
+    }, {});
+
+    return Object.values(map);
+}
+
 module.exports = {
     scrape,
     render,
-    url
+    urlBuilder,
+    stripUrlParams,
+    sanitizeFileName,
+    arrayFilterUnique
 };
-
-/* (async () => {
-    const $ = await scraper('https://www.oneplus.com/store/cases-protection?from=head');
-    const test = $('h1.text-black.text-center.font-headline-2').text();
-    console.log(test); // Cases & Protection
-})(); */
