@@ -47,3 +47,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+/server/.env
+/server/www
+/server/scraper/output
+/server/firebase-secret.json
