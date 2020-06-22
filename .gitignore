@@ -6,6 +6,11 @@
 /out-tsc
 /server/www
 /server/scraper/output
+
+# server config files (secrets)
+/server/.env
+/server/firebase-secret.json
+
 # Only exists if Bazel was run
 /bazel-out
 
@@ -47,7 +52,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-/server/.env
-/server/www
-/server/scraper/output
-/server/firebase-secret.json

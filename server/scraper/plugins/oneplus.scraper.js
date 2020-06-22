@@ -1,4 +1,4 @@
-const { scrape, render, urlBuilder, stripUrlParams } = require('./util');
+const { scrape, render, urlBuilder, stripUrlParams } = require('../util');
 const fs = require('fs');
 const stringify = require('json-stable-stringify');
 

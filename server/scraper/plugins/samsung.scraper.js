@@ -1,4 +1,4 @@
-const { scrape, render, urlBuilder, sanitizeFileName, arrayFilterUnique } = require('./util');
+const { scrape, render, urlBuilder, sanitizeFileName, arrayFilterUnique } = require('../util');
 const fs = require('fs');
 const { URL } = require('url');
 const stringify = require('json-stable-stringify');
