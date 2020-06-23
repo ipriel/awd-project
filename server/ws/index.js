@@ -18,6 +18,9 @@ module.exports = {
         // token middleware
         io.use(async (socket, next) => {
             const idToken = socket.handshake.query.token;
+            if(idToken == null || typeof idToken == 'undefined')
+                return next();
+            
             try {
                 const token = await admin.auth().verifyIdToken(idToken);
                 socket.username = token.uid;
@@ -26,7 +29,7 @@ module.exports = {
                 next(error);
             }
         });
-        
+
         /* 
         //client-side:
         //const idToken = await firebase.auth().currentUser.getIdToken(false);
