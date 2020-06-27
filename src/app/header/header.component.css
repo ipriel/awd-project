@@ -1,0 +1,24 @@
+.about
+{
+    margin: 0.3rem;
+}
+
+form 
+{
+    position: absolute;
+    right: 40%;
+
+}
+
+.side
+{
+    
+    position: absolute;
+    left: 94%;
+}
+
+.sides
+{
+    position: absolute;
+    left: 88%;
+}
