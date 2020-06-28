@@ -1,13 +1,25 @@
 <mat-toolbar color="primary">
-  <span>Site Name</span>
-  <button class="products" mat-flat-button color="accent">Products</button>
+ <span class="ourLogo"> <a routerLink="/"><img src="https://i.ibb.co/LZW2wZ0/bf10fb34-29c3-44d2-94ba-cc5a12f3f22c-200x200.png" alt="logo" border="0"></a>
+ </span>
+
+ <div>
+<button class="products" mat-flat-button color="accent" [matMenuTriggerFor]="prodList" >Products<mat-icon>expand_more</mat-icon></button>
+ <mat-menu #prodList="matMenu">
+   <button mat-menu-item>something1</button>
+   <button mat-menu-item>something2</button>
+ </mat-menu>
+</div>
+
   <button class="about" mat-flat-button color="accent">About Us</button>
+
   <form class="search-form">
     <mat-form-field>
       <mat-label>Search</mat-label>
       <input matInput type="text" />
+      <button mat-icon-button class="search-icon"><mat-icon>search</mat-icon></button>
     </mat-form-field>
   </form>
-  <button class="sides" mat-raised-button color="primary">Log in</button>
-  <button class="side" mat-raised-button color="warn">Register</button>
+
+  <button class="logIn" mat-raised-button color="primary">Log in</button>
+  <button class="register" mat-raised-button color="warn">Register</button>
 </mat-toolbar>
