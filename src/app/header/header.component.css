@@ -1,6 +1,11 @@
-.about
+.ourLogo
 {
-    margin: 0.3rem;
+    margin-top: 0.5rem;
+}
+
+.products
+{
+    margin: 1rem;
 }
 
 form 
@@ -10,15 +15,21 @@ form
 
 }
 
-.side
+.siteName
+{
+    color: cornflowerblue;
+}
+
+.logIn
 {
     
     position: absolute;
     left: 94%;
 }
 
-.sides
+.register
 {
     position: absolute;
     left: 88%;
 }
+

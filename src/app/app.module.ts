@@ -9,15 +9,21 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
 
 import { from } from 'rxjs';
 import { HeaderComponent } from './header/header.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AboutComponent } from './about/about.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    UserProfileComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +35,8 @@ import { HeaderComponent } from './header/header.component';
     MatButtonToggleModule,
     MatExpansionModule,
     MatInputModule,
+    MatIconModule,
+    MatMenuModule,
     
    
   ],
