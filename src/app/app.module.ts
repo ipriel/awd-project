@@ -15,7 +15,7 @@ import {MatMenuModule} from '@angular/material/menu';
 
 import { from } from 'rxjs';
 import { HeaderComponent } from './header/header.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserProfileComponent } from './store/user-profile/user-profile.component';
 import { AboutComponent } from './about/about.component';
 import { FooterComponent } from './footer/footer.component';
 
