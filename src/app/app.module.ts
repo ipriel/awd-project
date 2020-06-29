@@ -12,10 +12,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 
+
 import { from } from 'rxjs';
 import { HeaderComponent } from './header/header.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AboutComponent } from './about/about.component';
+import { FooterComponent } from './footer/footer.component';
+
+
 
 
 @NgModule({
@@ -23,7 +27,9 @@ import { AboutComponent } from './about/about.component';
     AppComponent,
     HeaderComponent,
     UserProfileComponent,
-    AboutComponent
+    AboutComponent,
+    FooterComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -37,6 +43,7 @@ import { AboutComponent } from './about/about.component';
     MatInputModule,
     MatIconModule,
     MatMenuModule,
+    
     
    
   ],

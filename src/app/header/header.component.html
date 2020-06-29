@@ -1,25 +1,66 @@
 <mat-toolbar color="primary">
- <span class="ourLogo"> <a routerLink="/"><img src="https://i.ibb.co/LZW2wZ0/bf10fb34-29c3-44d2-94ba-cc5a12f3f22c-200x200.png" alt="logo" border="0"></a>
- </span>
+  <span class="ourLogo">
+    <a routerLink="/"
+      ><img
+        src="https://i.ibb.co/LZW2wZ0/bf10fb34-29c3-44d2-94ba-cc5a12f3f22c-200x200.png"
+        alt="logo"
+        border="0"
+    /></a>
+  </span>
 
- <div>
-<button class="products" mat-flat-button color="accent" [matMenuTriggerFor]="prodList" >Products<mat-icon>expand_more</mat-icon></button>
- <mat-menu #prodList="matMenu">
-   <button mat-menu-item>something1</button>
-   <button mat-menu-item>something2</button>
- </mat-menu>
-</div>
+  <div>
+    <button
+      class="products"
+      mat-flat-button
+      color="accent"
+      [matMenuTriggerFor]="prodList"
+    >
+      <a>Products<mat-icon>expand_more</mat-icon></a>
+    </button>
+    <mat-menu #prodList="matMenu">
+      <button mat-menu-item>something1</button>
+      <button mat-menu-item>something2</button>
+    </mat-menu>
+  </div>
 
-  <button class="about" mat-flat-button color="accent">About Us</button>
+  <a routerLink="/about" class="about"
+    ><button mat-flat-button color="accent">About Us</button></a
+  >
 
   <form class="search-form">
     <mat-form-field>
       <mat-label>Search</mat-label>
       <input matInput type="text" />
-      <button mat-icon-button class="search-icon"><mat-icon>search</mat-icon></button>
+      <button mat-icon-button class="search-icon">
+        <mat-icon>search</mat-icon>
+      </button>
     </mat-form-field>
   </form>
 
-  <button class="logIn" mat-raised-button color="primary">Log in</button>
-  <button class="register" mat-raised-button color="warn">Register</button>
+  <div class="register" *ngIf="!isLogedIn; else userName">
+    <a routerLink="register"
+      ><button mat-raised-button color="warn">Register</button></a
+    >
+  </div>
+  <ng-template #userName>
+    <a href="#" class="user"
+      ><button mat-raised-button style="width: 6rem;" color="primary">
+        User name
+      </button></a
+    >
+  </ng-template>
+
+  <div class="logIn" *ngIf="!isLogedIn; else logOut">
+    <a routerLink="/log-in" (click)="onLogIn()"
+      ><button mat-raised-button color="primary">Log in</button></a>
+
+  </div>
+  <ng-template #logOut
+    ><a routerLink="/" class="logOut" (click)="onLogOut()"
+      ><button mat-raised-button color="warn">Log out</button></a >
+    </ng-template>
+
+    <a href="#" *ngIf="isLogedIn"><button mat-icon-button class="shopCart"><mat-icon>shopping_cart</mat-icon></button></a>
+
+
 </mat-toolbar>
