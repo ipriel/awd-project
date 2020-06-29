@@ -15,10 +15,7 @@ form
 
 }
 
-.siteName
-{
-    color: cornflowerblue;
-}
+
 
 .logIn
 {
@@ -31,5 +28,26 @@ form
 {
     position: absolute;
     left: 88%;
+}
+
+.user
+{
+    position: absolute;
+    left: 87%;
+   
+}
+
+.logOut
+{
+    position: absolute;
+    left: 94%;
+}
+
+.shopCart
+{
+    position: absolute;
+    left: 84%;
+    top: 1rem;
+    color: black;
 }
 

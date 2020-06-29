@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -8,8 +9,17 @@ import { MatMenuTrigger } from '@angular/material/menu';
 })
 export class HeaderComponent implements OnInit {
 
-  isLogedIn = false;
+  isLogedIn: boolean = false;
+
+  onLogIn(){
+    this.isLogedIn = true;
+    
+  }
  
+  onLogOut(){
+   this.isLogedIn = false;
+    
+  }
 
   constructor() { }
 
