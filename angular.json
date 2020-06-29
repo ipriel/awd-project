@@ -101,6 +101,10 @@
           "options": {
             "browserTarget": "AWD-Project:build"
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }

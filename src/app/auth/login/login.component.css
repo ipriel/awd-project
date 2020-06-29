@@ -1,0 +1,10 @@
+.main-login {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.two-col {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
