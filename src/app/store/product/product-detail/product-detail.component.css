@@ -1,0 +1,65 @@
+.container
+{
+    margin-left: 15%;
+    margin-top: 2%;
+    width: 20rem;
+}
+
+.magic
+{
+    max-height: 10rem;
+    width: 18rem;
+    margin: auto;
+    
+    
+}
+
+.spacer
+{
+    text-align: center;
+    padding: 1.5%;
+    
+}
+
+.space
+{
+    text-align: center;
+    padding: 1.5%;
+    margin-top: 0.5%;
+}
+
+
+.cart
+{
+    margin-top: 2%;
+    margin-left: 35%;
+}
+
+
+
+
+
+.prodDetail
+{
+    width: 800px;
+    height: auto;
+    margin-top: -24.5%;
+    margin-left: 40%;
+    
+}
+
+.head
+{
+    margin: auto;
+}
+
+.see
+{
+    height: 260px;
+}
+
+td
+{
+    margin: auto;
+}
+

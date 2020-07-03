@@ -1,0 +1,30 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title style="color: darkblue;">Your cart</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-divider></mat-divider>
+      <li class="prod-list" *ngFor="let product of products">
+        <div>
+            <h3>{{product.productName}}</h3>
+        </div>
+        <span class="price">$ {{ product.productPrice }}</span>
+        <mat-divider></mat-divider>
+      </li>
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <mat-divider></mat-divider>
+      <li class="space">
+          <span>Total(USD)</span>
+          <strong>${{totalValue}}</strong>
+      </li>
+    </mat-card-content>
+    <mat-card-footer>
+        <mat-divider></mat-divider>
+        <mat-card-actions>
+           <a [routerLink]="['/']"><button mat-flat-button color="primary">Continue Shopping</button></a> 
+           <a [routerLink]="['/checkout']"><button mat-flat-button color="warn">Checkout</button></a>
+        </mat-card-actions>
+    </mat-card-footer>
+</mat-card>

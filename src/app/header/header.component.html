@@ -13,13 +13,11 @@
       class="products"
       mat-flat-button
       color="accent"
-      [matMenuTriggerFor]="prodList"
-    >
+      [matMenuTriggerFor]="prodList">
       <a>Products<mat-icon class="expand">expand_more</mat-icon></a>
-      <a>Products<mat-icon>expand_more</mat-icon></a>
     </button>
     <mat-menu #prodList="matMenu">
-      <button mat-menu-item>something1</button>
+     <a [routerLink]="['store/products/product-details']"> <button mat-menu-item>something1</button></a>
       <button mat-menu-item>something2</button>
     </mat-menu>
   </div>
@@ -61,7 +59,7 @@
       ><button mat-raised-button color="warn">Log out</button></a >
     </ng-template>
 
-    <a href="#" *ngIf="isLogedIn"><button mat-icon-button class="shopCart"><mat-icon>shopping_cart</mat-icon></button></a>
+    <a [routerLink]="['store/products/shopping-cart']" *ngIf="isLogedIn"><button mat-icon-button class="shopCart"><mat-icon matBadge={{numOfProd()}} matBadgeColor="accent">shopping_cart</mat-icon></button></a>
 
 
 </mat-toolbar>
