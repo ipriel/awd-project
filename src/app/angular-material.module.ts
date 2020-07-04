@@ -10,6 +10,7 @@ import { MatBadgeModule } from "@angular/material/badge";
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 import {NgModule} from '@angular/core';
@@ -28,6 +29,7 @@ import {NgModule} from '@angular/core';
       MatDividerModule,
       MatListModule,
       MatGridListModule,
+      MatCheckboxModule,
     ]
   })
 
