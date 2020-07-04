@@ -1,0 +1,39 @@
+<mat-grid-list cols="8" rowHeight="500px">
+  <mat-grid-tile [colspan]="4" class="tile-card-container">
+    <div class="card-container">
+      <mat-card *ngFor="let product of cartProducts" class="example">
+        <!--might change here the route-->
+        <a [routerLink]="['/products/product', product.productId]">
+          <img
+            mat-mat-card-image
+            [src]="product.productImage"
+            alt=""
+            width="360px"
+            height="640px"
+          />
+        </a>
+        <mat-card-content>
+          <mat-card-subtitle style="text-align: center;"
+            ><h3>{{ product.productCategory }}</h3></mat-card-subtitle
+          >
+          <a
+            [routerLink]="['/products/product', product.productId]"
+            style="text-decoration: none;"
+            ><h4 style="text-align: center;">
+              <strong>{{ product.productName }}</strong>
+            </h4></a
+          >
+          <p style="text-align: center;">{{ product.productDescription }}</p>
+          <mat-divider></mat-divider>
+          <span class="item-price"><p style="text-align: center;">$ {{ product.productPrice }}</p>
+            <button mat-icon-button (click)="removeCartProd(product)"><mat-icon>cancel</mat-icon></button>
+            </span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="4">
+    <app-cart-calc [products]="cartProducts"></app-cart-calc>
+  </mat-grid-tile>
+</mat-grid-list>
