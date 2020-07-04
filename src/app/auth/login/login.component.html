@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Login</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class='main-login'>
+    <span>Not a user?</span><a [routerLink]="['register']">Register Now</a>
+    <form [formGroup]='loginForm' (ngSubmit)="localLogin(loginForm.value)">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type='text' formControlName='email'>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName='password'>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div>
+        <mat-checkbox formControlName='remember'>Remember Me</mat-checkbox>
+        <button mat-raised-button type="submit" color="primary">Login</button>
+      </div>
+    </form>
+    <div>
+      <a [routerLink]="['find-user']">Forgot Username?</a>
+      <a [routerLink]="['pass-reset']">Forgot Passord?</a>
+    </div>
+    <p>- or -</p>
+    <button mat-raised-button (click)='googleLogin()'>Google</button>
+    <button mat-raised-button (click)='facebookLogin()'>Facebook</button>
+    <button mat-raised-button (click)='twitterLogin()'>Twitter</button>
+  </mat-card-content>
+</mat-card>

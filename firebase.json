@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "AWD-Project",
+      "public": "server/www",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
