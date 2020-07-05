@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
-import { AuthModule } from './auth.module';
 
 @Injectable({
-  providedIn: AuthModule
+  providedIn: 'root'
 })
 export class AuthService {
 
@@ -13,7 +12,7 @@ export class AuthService {
     return res.claims;
   }
 
-  doLocalLogin(email: string, password: string): Promise<auth.UserCredential> {
+  doLocalLogin(email: string, password: string): Promise<void | auth.UserCredential> {
     return new Promise<any>((resolve, reject) => {
       auth().signInWithEmailAndPassword(email, password)
         .then(res => {
@@ -25,24 +24,24 @@ export class AuthService {
     });
   }
 
-  doGoogleLogin(): Promise<auth.UserCredential> {
+  doGoogleLogin(): Promise<void | auth.UserCredential> {
     let provider = new auth.GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
     return this.doSocialLogin(provider);
   }
 
-  doFacebookLogin(): Promise<auth.UserCredential> {
+  doFacebookLogin(): Promise<void | auth.UserCredential> {
     const provider = new auth.FacebookAuthProvider();
     return this.doSocialLogin(provider);
   }
 
-  doTwitterLogin(): Promise<auth.UserCredential> {
+  doTwitterLogin(): Promise<void | auth.UserCredential> {
     const provider = new auth.TwitterAuthProvider();
     return this.doSocialLogin(provider);
   }
 
-  private doSocialLogin(provider: auth.AuthProvider): Promise<auth.UserCredential> {
+  private doSocialLogin(provider: auth.AuthProvider): Promise<void | auth.UserCredential> {
     return this.afAuth.signInWithPopup(provider)
       .catch(err => {
         console.log(err);

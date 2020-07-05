@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   isLogedIn: boolean = false;
+  cap: number =6;
 
   onLogIn(){
     this.isLogedIn = true;
@@ -19,6 +20,11 @@ export class HeaderComponent implements OnInit {
   onLogOut(){
    this.isLogedIn = false;
     
+  }
+
+  numOfProd(){
+    if(this.cap >0)
+    return this.cap;
   }
 
   constructor() { }
