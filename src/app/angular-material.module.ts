@@ -11,6 +11,9 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 
 import {NgModule} from '@angular/core';
@@ -30,6 +33,9 @@ import {NgModule} from '@angular/core';
       MatListModule,
       MatGridListModule,
       MatCheckboxModule,
+      MatStepperModule,
+      MatFormFieldModule,
+      MatSelectModule,
     ]
   })
 

@@ -9,6 +9,7 @@ import {AngularMaterialModel} from './angular-material.module'
 
 import { MatCarouselModule } from "@ngmodule/material-carousel";
 
+
 import { from } from "rxjs";
 import { HeaderComponent } from "./header/header.component";
 import { UserProfileComponent } from "./store/user-profile/user-profile.component";
@@ -39,5 +40,6 @@ import { HomeComponent } from "./home/home.component";
   ],
   providers: [],
   bootstrap: [AppComponent],
+  
 })
 export class AppModule {}

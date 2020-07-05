@@ -1,18 +1,24 @@
 .footer
 {   
     width: 100%;
-    position: fixed;
-    bottom: 0;
-    flex: auto;  
+    bottom: 0; 
     display: flex;
+    justify-content: center;
+    align-items: baseline;
     
 }
 
-.ourLogo
+.bar
 {
-    position: fixed;
-    left: 42%;
+    display: flex;
+    justify-content: center;
     
+    
+}
+
+.bar img{
+    display: block;
+    padding: 0;
     
 }
 
