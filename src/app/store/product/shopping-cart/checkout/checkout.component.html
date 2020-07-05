@@ -1,1 +1,14 @@
-<p>checkout works!</p>
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Products review</ng-template>
+    <mat-card>
+        
+    </mat-card>
+  </mat-step>
+  <mat-step [stepControl]="firstFormGroup" label="shipping-detailes">
+    <app-shipping-details></app-shipping-details>
+  </mat-step>
+  <mat-step label='Payment'> 
+
+  </mat-step>
+</mat-horizontal-stepper>
