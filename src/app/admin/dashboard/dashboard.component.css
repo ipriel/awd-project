@@ -1,0 +1,50 @@
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    justify-items: center;
+}
+
+.grid-card {
+    width: 60%;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.income-icon {
+    background-size: cover;
+    background-image: url('src/assets/images/income_icon.png');
+}
+
+.products-icon {
+    background-size: cover;
+    background-image: url('src/assets/images/products_icon.jpg');
+}
+
+.users-icon {
+    background-size: cover;
+    background-image: url('src/assets/images/users_icon.png');
+}
+
+.online-icon {
+    background-size: cover;
+    background-image: url('src/assets/images/online_icon.png');
+}
+
+.income-card {
+    background-color: limegreen;
+}
+
+.products-card {
+    background-color: rgb(0, 212, 212);
+}
+
+.users-card {
+    background-color: violet;
+}
+
+.online-card {
+    background-color: lightcoral;
+}

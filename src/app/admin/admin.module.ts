@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { MatCardModule } from '@angular/material/card';
 // import { AdminComponent } from './admin.component';
 
 
@@ -10,7 +11,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   // declarations: [AdminComponent],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    MatCardModule,
   ],
   declarations: [DashboardComponent]
 })
