@@ -17,9 +17,10 @@ const OrdersSchema = new Schema({
     billingAddress: user.addressSchema,
     status: [statusSchema],
     totalPrice: Number,
-    items: [product.Product]
+    items: [product.Product],
+    shippingType: Number
 });
 
 const Order = mongoose.model('order', OrdersSchema);
 
-module.exports = Order;
+module.exports.Order = Order;

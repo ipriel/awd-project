@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 routes.register(app);
 ws.init(app);
 
+mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 const db = mongoose.connection;
 
