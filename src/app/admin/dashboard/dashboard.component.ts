@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from 'src/app/admin.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +11,7 @@ export class DashboardComponent implements OnInit {
   todaysIncome;
   productsSum;
   registeredUsers;
-  onlinePeople;
+  peopleOnline;
 
   constructor(private adminService: AdminService) { }
 
@@ -27,9 +28,9 @@ export class DashboardComponent implements OnInit {
     this.adminService.getRegisteredUsers()
       .subscribe( value => { this.registeredUsers = value; });
 
-    // get online people
-    this.adminService.getOnlinePeople()
-      .subscribe( value => { this.onlinePeople = value; });
+    // get people online
+    this.adminService.getPeopleOnline()
+      .subscribe( value => { this.peopleOnline = value; });
   }
 
 
