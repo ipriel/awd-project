@@ -6,7 +6,7 @@
             <mat-card-title>Today's Income</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1>540$</h1>
+            <h1>{{ todaysIncome }}</h1>
         </mat-card-content>
     </mat-card>
     <!-- Products card -->
@@ -16,7 +16,7 @@
             <mat-card-title>Items In Store</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1>490</h1>
+            <h1>{{ productsSum }}</h1>
         </mat-card-content>
     </mat-card>
     <!-- Users card -->
@@ -26,7 +26,7 @@
             <mat-card-title>Registered Users</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1 class="card-content">58</h1>
+            <h1 class="card-content">{{ registeredUsers }}</h1>
         </mat-card-content>
     </mat-card>
     <!-- Online card -->
@@ -36,7 +36,7 @@
             <mat-card-title>People Online</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1 class="card-content">13</h1>
+            <h1 class="card-content">{{ peopleOnline }}</h1>
         </mat-card-content>
     </mat-card>
 </div>
