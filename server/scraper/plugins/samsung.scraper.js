@@ -1,33 +1,48 @@
-const { scrape, render, urlBuilder, sanitizeFileName, arrayFilterUnique } = require('../util');
 const fs = require('fs');
-const { URL } = require('url');
 const stringify = require('json-stable-stringify');
+const { URL } = require('url');
+const { scrape, render, urlBuilder, sanitizeFileName, arrayFilterUnique, parseImage, parsePrice } = require('../util');
+const xeRate = 4.31838;
 
 async function runScraper() {
     const host = 'https://www.samsung.com/uk/';
     const company = 'Samsung';
     const $ = await scrape(host);
-    const nav = $('.gb-footer-2020__sitemap-items').children().first();
+    const nav = $('.footer .footer-column').children().first();
     const promises = $('li', nav)
         .map(async (_, elem) => {
             const prodType = $('a', elem);
+            let prodName = prodType.text();
             let ref = stripUrlPrefix(prodType.attr('href'));
-            if (prodType.text() == 'Memory Storage' ||
-                prodType.text() == 'Home Appliances') {
-                return await scrapeSublinks(host, urlBuilder(host, ref));
+            let newVal;
+
+            if (prodName == 'Memory Storage') {
+                newVal = await scrapeSublinks(host, urlBuilder(host, ref));
+            } else if (['Air Solutions', 'Smart Switch', 'Lifestyle TVs'].includes(prodName)) {
+                newVal = null;
             } else {
-                return {
-                    name: prodType.text(),
+                if (['Audio Sound', 'Watches'].includes(prodName)) {
+                    prodName = 'Wearables';
+                    ref = '/wearables/';
+                } else if (prodName == 'Laundry') {
+                    ref = '/laundry/';
+                } else if (prodName == 'Sound Devices') {
+                    prodName = 'Home Audio';
+                }
+
+                newVal = {
+                    name: prodName,
                     url: urlBuilder(host, addUrlSuffix(ref))
                 };
             }
+
+            return newVal;
         })
         .get();
 
     const prodTypes = (await Promise.all(promises)).flat();
-    
+
     for (const prodType of arrayFilterUnique(prodTypes, 'url')) {
-        if (prodType.name == 'Cooking') prodType.name += ' Appliances';
         console.log(`${prodType.name} Start`);
         await scrapeCategory(company, prodType.name, host, prodType.url);
         console.log(`${prodType.name} Complete`);
@@ -38,12 +53,13 @@ async function scrapeSublinks(host, url) {
     try {
         const $ = await scrape(url);
 
-        return $('li', '.secondary-menu .secondary-menu__lst ul')
+        return $('.aem-Grid', '.root .aem-Grid .responsivegrid')
+            .children('.pd-g-feature-benefit')
             .map((_, elem) => {
-                const prodType = $('a', elem);
-                let ref = stripUrlPrefix(prodType.attr('href'));
+                let ref = $('a.cta', elem).attr('href');
+                ref = stripUrlPrefix(ref);
                 return {
-                    name: $('span', prodType).text(),
+                    name: $('.feature-benefit__title', elem).text(),
                     url: urlBuilder(host, addUrlSuffix(ref))
                 };
             })
@@ -74,19 +90,35 @@ async function scrapeCategory(company, type, host, url) {
             company,
             specs: {}
         }
+
         //TODO: Add scrape for SKU and options (color, etc.)
         const price = $('.cm-shop-card__price-num strong', prod).text();
         const title = $('.js-cm-shop-card__product .cm-shop-card__product', prod);
         const ref = stripUrlPrefix($(title).attr('href'));
-        data["list price"] = parsePrice(price);
+        let imgSrc = ($('.cm-shop-card__img', prod).has('.s-slick').length > 0)
+            ? $('.cm-shop-card__img .s-slick', prod)
+                .children()
+                .first()
+                .children('img')
+                .attr('src')
+            : $('.product-card-pdp-link img', '.cm-shop-card__img', prod)
+                .attr('src');
+        if (imgSrc.startsWith('//'))
+            imgSrc = 'https:' + imgSrc;
+        data["list price"] = parsePrice(price, xeRate);
         data.name = $('.s-txt-title', title).text().replace(/\.+$/, '');
+        try {
+            data.image = await parseImage(imgSrc);
+        }
+        catch (err) {
+            console.error('Error scraping image: ' + imgSrc);
+            console.error(data.name + ' = ' + $('.cm-shop-card__img', prod).has('.s-slick').length);
+        }
 
         try {
             const spec = await getSpecSrc(host, ref);
-            if (typeof spec == 'undefined') {
-                console.log(`u-${i}: ` + data.name);
+            if (typeof spec == 'undefined')
                 return; // skip if parse failed
-            }
 
             if (spec.hasSpecPage)
                 data.specs = await scrapeSpecPage(spec.$);
@@ -94,18 +126,14 @@ async function scrapeCategory(company, type, host, url) {
                 data.specs = await scrapeSpecPanel(spec.$, spec.url);
 
             if (Object.keys(data.specs).length) {
-                //console.log(`i-${i}: ${data.name}`);
                 const name = sanitizeFileName(data.name);
                 fs.writeFileSync(`./scraper/output/${name}.json`, stringify(data, { space: 2 }));
             }
-            else
-                console.log(`e-${i}: ` + data.name);
         } catch (err) {
             console.error(url);
             console.error(err);
         }
     });
-    console.log("Total: " + cards.length);
 }
 
 async function getSpecSrc(host, ref) {
@@ -221,15 +249,6 @@ function addUrlSuffix(ref) {
     if (!/\/([^/]+)\/all-\1\/?(?:\?.*)?$/.test(ref))
         ref = ref.replace(/\/([^/]+)\/(\?.*)?$/, '/$1/all-$1/$2');
     return ref;
-}
-
-/** Parse string to float and convert to ILS
- * @example '£1,900.00' => 8333.38
- */
-function parsePrice(priceStr) {
-    priceStr = priceStr.replace(/[^0-9.]/g, "");
-    const price = parseFloat(priceStr) * 4.3888;
-    return parseFloat(price.toFixed(2));
 }
 
 module.exports = {

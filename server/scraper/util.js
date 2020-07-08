@@ -1,6 +1,7 @@
 const got = require('got');
 const cheerio = require('cheerio');
 const Nightmare = require('nightmare');
+const FileType = require('file-type');
 
 /**
  * Loads html document at url and returns $() function
@@ -94,6 +95,8 @@ function sanitizeFileName(name) {
 
 function arrayFilterUnique(arr, key) {
     const map = arr.reduce((map, val) => {
+        if (val == null)
+            return map;
         const prop = key ? val[key] : val;
         if (!map.hasOwnProperty(prop))
             map[prop] = val;
@@ -103,11 +106,33 @@ function arrayFilterUnique(arr, key) {
     return Object.values(map);
 }
 
+async function parseImage(src) {
+    const buffer = await got(src, { responseType: 'buffer', resolveBodyOnly: true });
+    const type = await FileType.fromBuffer(buffer);
+
+    return {
+        contentType: type.mime,
+        data: buffer
+    };
+
+}
+
+/** Parse string to float and convert to ILS
+ * @example '$24.95' => 86.23
+ */
+function parsePrice(priceStr, xeRate) {
+    priceStr = priceStr.replace(/[^0-9.]/g, "");
+    const price = parseFloat(priceStr) * xeRate;
+    return parseFloat(price.toFixed(2));
+}
+
 module.exports = {
     scrape,
     render,
     urlBuilder,
     stripUrlParams,
     sanitizeFileName,
-    arrayFilterUnique
+    arrayFilterUnique,
+    parseImage,
+    parsePrice
 };

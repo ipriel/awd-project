@@ -1,5 +1,7 @@
+const schedule = require('node-schedule');
 const path = require('path');
 const fs = require('fs');
+
 let plugins;
 
 async function getPlugins(directoryPath) {
@@ -21,13 +23,29 @@ async function init() {
     plugins = await getPlugins(directoryPath);
 }
 
+async function initScheduler() {
+    await init();
+    schedule.scheduleJob('0 1 * * 6', run);
+}
+
 async function run() {
-    for(plugin of plugins) {
+    for (plugin of plugins) {
         await plugin.run();
     }
 }
 
-(async () => {
-    await init();
+async function runOnce() {
+    if (typeof plugins == 'undefined' ||
+        plugins == null ||
+        plugins.length == 0)
+        await init();
+    
     run();
-})();
+}
+
+module.exports = {
+    init,
+    initScheduler,
+    run,
+    runOnce
+}

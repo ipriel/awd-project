@@ -1,6 +1,7 @@
-const { scrape, render, urlBuilder, stripUrlParams } = require('../util');
 const fs = require('fs');
 const stringify = require('json-stable-stringify');
+const { scrape, render, urlBuilder, stripUrlParams, parseImage, parsePrice } = require('../util');
+const xeRate = 3.45624;
 
 async function runScraper() {
     const host = 'https://www.oneplus.com/';
@@ -14,10 +15,10 @@ async function runScraper() {
         let data = await scrapePhone($(obj).text(), ref);
         data.company = company;
         data['_type'] = 'Phone';
-        
+
         // If scraping succeeded, output results
-        if(data.specs && data.specs.length > 0)
-            fs.writeFileSync('./scraper/output/'+data.name+'.json', stringify(data, {space: 2}));
+        if (data.specs && data.specs.length > 0)
+            fs.writeFileSync('./scraper/output/' + data.name + '.json', stringify(data, { space: 2 }));
     });
 
     const accessories = $(nav[1]);
@@ -25,7 +26,7 @@ async function runScraper() {
         const ref = urlBuilder(host, $(obj).attr('href'));
         try {
             let dataArr = await scrapeAccessoryType(company, $(obj).text(), ref);
-            dataArr.forEach(data => fs.writeFileSync('./scraper/output/'+data.name+'.json', stringify(data, {space: 2})));
+            dataArr.forEach(data => fs.writeFileSync('./scraper/output/' + data.name + '.json', stringify(data, { space: 2 })));
         } catch (err) {
             console.error(err);
         }
@@ -34,10 +35,10 @@ async function runScraper() {
 
 async function scrapePhone(name, url) {
     url += '/specs';
-    console.log('>' + url);
     const $ = await render(url);
     let data = {
         name,
+        image: {},
         specs: {}
     }
 
@@ -63,25 +64,38 @@ async function scrapePhone(name, url) {
     });
 
     const buyUrl = $('a.buy-btn', 'div.nav-list').attr('href');
-    const price = await scrapePrice(buyUrl);
-    if (price)
-        data["list price"] = price;
+    const buyData = await scrapeBuyPage(buyUrl);
+
+    if (buyData) {
+        if (buyData.price)
+            data["list price"] = buyData.price;
+        data.image = buyData.image;
+    }
 
     return data;
 }
 
-async function scrapePrice(url) {
+async function scrapeBuyPage(url) {
     try {
         url = stripUrlParams(url);
         const $ = await render(url);
+
         let price = ($('span.price-money', '.device-choose').text() || $('.phone-info h6 span').text()).trim();
+        price = (price == "") ? null : parsePrice(price, xeRate);
 
-        if (price === "") return null; // Edge case - parse failure
+        let imgSrc = $('.device-in-the-box img', '#in-the-box-slides').attr('src');
+        if(imgSrc.startsWith('data:'))
+            imgSrc = $('img.lazyload', '.swiper-slide-active').attr('src');
+        
+        const image = await parseImage(imgSrc);
 
-        return parsePrice(price);
+        return {
+            price,
+            image
+        };
     } catch (err) {
         console.error('Error scraping url: ' + url);
-        console.error(`${err.message} ${(err.code != null) ? '(' + err.code + ')' : ''}`);
+        console.error(err);
         return null;
     }
 }
@@ -108,18 +122,21 @@ async function scrapeAccessoryType(company, type, url) {
             let data = {
                 _type: type,
                 company,
+                image: {},
                 specs: {}
             }
 
-            const price = $('.accessory-price .price', accessory).text() || $('.accessory-price .discounted', accessory).text();
-            data["list price"] = parsePrice(price);
+            const price = $('.accessory-price .price', accessory).text() ||
+                $('.accessory-price .discounted', accessory).text();
+            data["list price"] = parsePrice(price, xeRate);
             data.name = $('.accessory-name', accessory).text();
+            const imgSrc = $('img', '.card-image').attr('src');
+            data.image = await parseImage(imgSrc);
             data.specs = await scrapeAccessory($('.accessory-card', accessory).attr('href'));
-            
             dataArr.push(data);
         })
         .get();
-    
+
     await Promise.all(promises);
     return dataArr;
 }
@@ -199,10 +216,6 @@ async function parseColType($) {
     });
 
     return specs;
-}
-
-function parsePrice(price) {
-    return parseFloat(price.replace(/[^0-9.,]/g, ""));
 }
 
 module.exports = {
