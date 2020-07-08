@@ -5,6 +5,7 @@ const chat = require('./chat');
 const pushUpdater = require('./push-updater');
 var serviceAccount = require("../firebase-secret.json");
 const { Product } = require('../models');
+const { ProductMeta } = require('../models');
 
 module.exports = {
     init: (app) => {
@@ -39,8 +40,13 @@ module.exports = {
             const sub = await pushUpdater.listen(socket);
             const session = await chat.listen(socket);
 
-            socket.on('search', async (term, cb) => {
+            socket.on('search:product', async (term, cb) => {
                 const res = await Product.fuzzySearch(term);
+                cb(res);
+            });
+
+            socket.on('search:productMeta', async (term, cb) => {
+                const res = await ProductMeta.fuzzySearch(term);
                 cb(res);
             });
 
