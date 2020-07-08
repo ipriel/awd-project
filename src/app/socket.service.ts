@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 import io from 'socket.io-client';
 
@@ -8,11 +7,11 @@ import io from 'socket.io-client';
 })
 export class SocketService {
   private socket;
-  private searchSub = new BehaviorSubject(null);
+  private prodSearchSub = new BehaviorSubject(null);
+  private prodMetaSearchSub = new BehaviorSubject(null);
   private chatSub = new BehaviorSubject(null);
 
-  async onLogin() {
-    const idToken = await this.afAuth.idToken.toPromise();
+  async onLogin(idToken: string) {
     this.socket.io.opts.query = { token: idToken }
   }
 
@@ -20,23 +19,31 @@ export class SocketService {
     this.socket.io.opts.query = { token: null }
   }
 
-  search(term) {
-    this.socket.emit('search', term, (res: any) => this.searchSub.next(res));
+  searchProducts(term) {
+    this.socket.emit('search:product', term, (res: any) => this.prodSearchSub.next(res));
+  }
+
+  searchProductMetas(term) {
+    this.socket.emit('search:productMeta', term, (res: any) => this.prodMetaSearchSub.next(res));
   }
 
   sendChat(message) {
     this.socket.emit('chat:message', message, (data) => this.chatSub.next(data.response));
   }
 
-  get searchResults$() {
-    return this.searchSub.asObservable();
+  get prodSearchResults$() {
+    return this.prodSearchSub.asObservable();
+  }
+
+  get prodMetaSearchResults$() {
+    return this.prodMetaSearchSub.asObservable();
   }
 
   get chatMessages$() {
     return this.chatSub.asObservable();
   }
 
-  constructor(private afAuth: AngularFireAuth) { 
+  constructor() { 
     this.socket = io();
     
     this.socket.on('update', (data: any) => {

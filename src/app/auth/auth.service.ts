@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
+import { SocketService } from '../socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AuthService {
   }
 
   doGoogleLogin(): Promise<void | auth.UserCredential> {
-    let provider = new auth.GoogleAuthProvider();
+    const provider = new auth.GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
     return this.doSocialLogin(provider);
@@ -43,22 +44,22 @@ export class AuthService {
 
   private doSocialLogin(provider: auth.AuthProvider): Promise<void | auth.UserCredential> {
     return this.afAuth.signInWithPopup(provider)
-      .catch(err => {
-        console.log(err);
+      .then(async (cred) => {
+        const idToken = await this.afAuth.idToken.toPromise();
+        this.socket.onLogin(idToken);
       });
   }
 
-  logout() {
-    return new Promise<any>((resolve, reject) => {
-      auth().signOut()
-        .then(res => {
-          resolve(null);
-        }, err => {
-          console.log(err);
-          reject(err);
-        });
-    });
+  fetchSignInMethodsForEmail(email: string) {
+    return auth().fetchSignInMethodsForEmail(email);
   }
 
-  constructor(private afAuth: AngularFireAuth) { }
+  logout() {
+    return auth().signOut()
+      .then(res => {
+        this.socket.onLogout()
+      });
+  }
+
+  constructor(private afAuth: AngularFireAuth, private socket: SocketService) { }
 }
