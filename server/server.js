@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const routes = require('./routes');
 const ws = require('./ws');
+const scraper = require('./scraper');
 
 const port = process.env.PORT || 3000;
 
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 routes.register(app);
 ws.init(app);
+scraper.initScheduler();
 
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
