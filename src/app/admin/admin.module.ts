@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCardModule } from '@angular/material/card';
-import { BarDirectiveDirective } from './bar-directive.directive';
+import { BarDirective } from './bar.directive';
 // import { AdminComponent } from './admin.component';
 
 
@@ -15,6 +15,6 @@ import { BarDirectiveDirective } from './bar-directive.directive';
     AdminRoutingModule,
     MatCardModule,
   ],
-  declarations: [DashboardComponent, BarDirectiveDirective]
+  declarations: [DashboardComponent, BarDirective]
 })
 export class AdminModule { }
