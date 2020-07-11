@@ -4,6 +4,8 @@ const admin = require('firebase-admin');
 const chat = require('./chat');
 const pushUpdater = require('./push-updater');
 var serviceAccount = require("../firebase-secret.json");
+const { Product } = require('../models');
+const { ProductMeta } = require('../models');
 
 module.exports = {
     init: (app) => {
@@ -30,20 +32,6 @@ module.exports = {
             }
         });
 
-        /* 
-        //client-side:
-        //const idToken = await firebase.auth().currentUser.getIdToken(false);
-        //const socket = io({
-        //  query: {
-        //    token: idToken
-        //  }
-        //});
-        // - or -
-        //socket.io.opts.query = {
-        //  token: idToken
-        //}
-        */
-
         pushUpdater.init(io);
 
         io.on('connection', (socket) => {
@@ -51,6 +39,16 @@ module.exports = {
 
             const sub = await pushUpdater.listen(socket);
             const session = await chat.listen(socket);
+
+            socket.on('search:product', async (term, cb) => {
+                const res = await Product.fuzzySearch(term);
+                cb(res);
+            });
+
+            socket.on('search:productMeta', async (term, cb) => {
+                const res = await ProductMeta.fuzzySearch(term);
+                cb(res);
+            });
 
             socket.on('disconnect', () => {
                 console.log('user disconnected');

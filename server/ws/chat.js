@@ -33,11 +33,11 @@ async function queryAssistant(msg, session_id) {
 async function listen(socket) {
     const sessionId = await createSession();
 
-    socket.on('chat:message', async (msg) => {
+    socket.on('chat:message', async (msg, cb) => {
         try {
             const res = await queryAssistant(msg, sessionId);
 
-            socket.emit('chat:response', {
+            cb({
                 response: res.output.generic,
                 intents: res.output.intents
             });

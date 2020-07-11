@@ -6,6 +6,7 @@ const ProductSchema = new Schema({
     name: String,
     type: String,
     company: String,
+    image: { data: Buffer, contentType: String },
     price: Number,
     description: String,
     discount: Number,
@@ -13,6 +14,8 @@ const ProductSchema = new Schema({
     specs: [Schema.Types.Mixed],
     showInStore: Boolean
 });
+
+ProductSchema.plugin(mongoose_fuzzy_searching, { fields: ['name', 'company'] });
 
 const Product = mongoose.model('product', ProductSchema);
 
