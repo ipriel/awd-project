@@ -1,0 +1,66 @@
+<br>
+<br>
+<br>
+<mat-grid-list class="my-grid" cols="6" rowHeight="100px" padding="10px">
+    <mat-grid-tile class="my-tile" colspan="3">
+        <mat-form-field appearance="fill"> 
+            <mat-label>Select Product Type</mat-label>
+            <mat-select placeholder="Product Type" (selectionChange)="searchProducts()" [(value)]="selectedType">
+                <mat-option value="1">Shop Products</mat-option>
+                <mat-option value="2">Meta Products</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile class="my-tile" [colspan]="3">
+        <mat-form-field appearance="fill">
+            <mat-label>Choose Product</mat-label>
+            <mat-select placeholder="Products" [disabled]="isOptionsEmpty()" (selectionChange)="findProduct($event.value)">
+                <mat-option *ngFor="let o of options" [value]="o.value">{{ o.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+<br>
+<br>
+<div id="shopProduct" class="product" *ngIf="showProduct">
+    <h3 class="title">Name: </h3>
+    <mat-form-field>
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.name" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <h3 class="title">Type: </h3>
+    <mat-form-field class="desc">
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.type" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <h3 class="title">Company: </h3>
+    <mat-form-field>
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.company" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <h3 class="title">Normal Price: </h3>
+    <mat-form-field>
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.price" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <h3 class="title">Discount(percentage): </h3>
+    <mat-form-field>
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.discount" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <h3 class="title">Description: </h3>
+    <mat-form-field>
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.description" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <h3 class="title">Quantity: </h3>
+    <mat-form-field>
+        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.quantity" [disabled]="!updateProduct">
+    </mat-form-field><br>
+    <div *ngFor="let spec in currentProduct.specs">
+        <h3 class="title">{{ spec.title }}: </h3>
+        <mat-form-field>
+            <input class="desc" matInput type="text" [(ngModel)]="specs.value" [disabled]="!updateProduct">
+        </mat-form-field><br>
+    </div>
+    <h3 class="title">Show In Store: </h3>
+    <mat-checkbox class="checkbox" [(ngModel)]="currentProduct.showInStore" [checked]="currentProduct.showInStore" [disabled]="!updateProduct"></mat-checkbox>
+</div>
+<div id="metaProduct" class="product" *ngIf="showMeta">
+    
+</div>

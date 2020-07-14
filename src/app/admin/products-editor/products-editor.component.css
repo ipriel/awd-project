@@ -1,0 +1,31 @@
+.my-grid {
+    width: 50%;
+    margin: auto;
+}
+
+.title {
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.product {
+    width: 30%;
+    margin: auto;
+}
+
+.desc {
+    display: inline-block !important;
+}
+
+.checkbox {
+    display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+  display: inline-block;
+}
+
+:host {
+    background: whitesmoke;
+}
