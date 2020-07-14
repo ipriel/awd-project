@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const product = require('./product');
 
 // Create Schema and Model
 const addressSchema = new Schema({
@@ -19,8 +18,8 @@ const UserSchema = new Schema({
     lastName: String,
     address: addressSchema,
     email: String,
-    orders: [Number],
-    cart: [product.Product],
+    orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
+    cart: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
     shippingAddress: [addressSchema]
 });
 

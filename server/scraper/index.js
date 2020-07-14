@@ -29,8 +29,9 @@ async function initScheduler() {
 }
 
 async function run() {
-    for (plugin of plugins) {
+    for (const plugin of plugins) {
         await plugin.run();
+        console.log('Scraper Finished');
     }
 }
 
@@ -40,7 +41,7 @@ async function runOnce() {
         plugins.length == 0)
         await init();
     
-    run();
+    return run();
 }
 
 module.exports = {

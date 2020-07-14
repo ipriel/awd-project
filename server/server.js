@@ -17,7 +17,12 @@ ws.init(app);
 scraper.initScheduler();
 
 mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+  useUnifiedTopology: true
+});
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));

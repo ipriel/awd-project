@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { ProductMeta } = require('../models');
+const { ProductMeta } = require('../models/product-meta.model');
 const { verifyToken, hasRole, hasRoles } = require('./middleware/auth.middleware');
 
 // Create
