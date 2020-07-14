@@ -1,10 +1,10 @@
-const fs = require('fs');
-const stringify = require('json-stable-stringify');
 const { URL } = require('url');
-const { scrape, render, urlBuilder, sanitizeFileName, arrayFilterUnique, parseImage, parsePrice } = require('../util');
+const { scrape, render, urlBuilder, sanitizeFileName, arrayFilterUnique, parseImage, parsePrice, save } = require('../util');
 const xeRate = 4.31838;
 
 async function runScraper() {
+    //console.log('Begin Scrapping - Samsung');
+
     const host = 'https://www.samsung.com/uk/';
     const company = 'Samsung';
     const $ = await scrape(host);
@@ -43,9 +43,9 @@ async function runScraper() {
     const prodTypes = (await Promise.all(promises)).flat();
 
     for (const prodType of arrayFilterUnique(prodTypes, 'url')) {
-        console.log(`${prodType.name} Start`);
+        //console.log(`${prodType.name} Start`);
         await scrapeCategory(company, prodType.name, host, prodType.url);
-        console.log(`${prodType.name} Complete`);
+        //console.log(`${prodType.name} Complete`);
     }
 }
 
@@ -113,6 +113,7 @@ async function scrapeCategory(company, type, host, url) {
         catch (err) {
             console.error('Error scraping image: ' + imgSrc);
             console.error(data.name + ' = ' + $('.cm-shop-card__img', prod).has('.s-slick').length);
+            console.error(err);
         }
 
         try {
@@ -127,7 +128,7 @@ async function scrapeCategory(company, type, host, url) {
 
             if (Object.keys(data.specs).length) {
                 const name = sanitizeFileName(data.name);
-                fs.writeFileSync(`./scraper/output/${name}.json`, stringify(data, { space: 2 }));
+                save(data);
             }
         } catch (err) {
             console.error(url);

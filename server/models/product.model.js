@@ -1,3 +1,4 @@
+const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -11,7 +12,7 @@ const ProductSchema = new Schema({
     description: String,
     discount: Number,
     quantity: Number,
-    specs: [Schema.Types.Mixed],
+    specs: Schema.Types.Mixed,
     showInStore: Boolean
 });
 
