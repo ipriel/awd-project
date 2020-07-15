@@ -6,6 +6,7 @@
         <mat-form-field appearance="fill"> 
             <mat-label>Select Product Type</mat-label>
             <mat-select placeholder="Product Type" (selectionChange)="searchProducts()" [(value)]="selectedType">
+                <mat-option value="0">--None--</mat-option>
                 <mat-option value="1">Shop Products</mat-option>
                 <mat-option value="2">Meta Products</mat-option>
             </mat-select>
@@ -14,7 +15,7 @@
     <mat-grid-tile class="my-tile" [colspan]="3">
         <mat-form-field appearance="fill">
             <mat-label>Choose Product</mat-label>
-            <mat-select placeholder="Products" [disabled]="isOptionsEmpty()" (selectionChange)="findProduct($event.value)">
+            <mat-select placeholder="Products" [disabled]="isOptionsEmpty()" (selectionChange)="findProduct()" [(ngModel)]="selectedProduct">
                 <mat-option *ngFor="let o of options" [value]="o.value">{{ o.name }}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -23,92 +24,95 @@
 <mat-divider></mat-divider>
 <br>
 <br>
-<div id="shopProduct" class="product" *ngIf="showProduct">
+<mat-card id="shopProduct" class="product" *ngIf="showProduct">
+    <h1 class="product-header">Shop Product</h1>
     <h3 class="title">Name: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.name" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.name" [disabled]="!updatingProduct">
     </mat-form-field><br>
     <h3 class="title">Type: </h3>
     <mat-form-field class="desc">
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.type" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.type" [disabled]="!updatingProduct">
     </mat-form-field><br>
     <h3 class="title">Company: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.company" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.company" [disabled]="!updatingProduct">
     </mat-form-field><br>
     <h3 class="title">Normal Price: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="number" [(ngModel)]="currentProduct.price" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.price" [disabled]="!updatingProduct">
     </mat-form-field><br>
     <h3 class="title">Discount(percentage): </h3>
     <mat-form-field>
-        <input class="desc" matInput type="number" [(ngModel)]="currentProduct.discount" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.discount" [disabled]="!updatingProduct">
     </mat-form-field><br>
     <h3 class="title">Description: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.description" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.description" [disabled]="!updatingProduct">
     </mat-form-field><br>
     <h3 class="title">Quantity: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="number" [(ngModel)]="currentProduct.quantity" [disabled]="!updatingProduct">
+        <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.quantity" [disabled]="!updatingProduct">
     </mat-form-field><br>
-    <div *ngFor="let spec in options">
-        <h3 class="title">{{ spec.name }}: </h3>
+    <div *ngFor="let spec of tmpProduct.specs">
+        <h3 class="title">{{ spec.title }}: </h3>
         <mat-form-field>
             <input class="desc" matInput type="text" [(ngModel)]="spec.value" [disabled]="!updatingProduct">
         </mat-form-field><br>
     </div>
     <h3 class="title">Show In Store: </h3>
-    <mat-checkbox class="checkbox" [(ngModel)]="currentProduct.showInStore" [checked]="currentProduct.showInStore" [disabled]="!updatingProduct"></mat-checkbox>
+    <mat-checkbox class="checkbox" [(ngModel)]="tmpProduct.showInStore" [checked]="tmpProduct.showInStore" [disabled]="!updatingProduct"></mat-checkbox>
     <br>
     <button class="inner" mat-flat-button color="primary" *ngIf="updatingProduct" (click)="saveUpdate()">Save</button>
     <button class="inner" mat-flat-button color="primary" *ngIf="!updatingProduct" (click)="updateProduct()">Update</button>
     <button class="inner" mat-flat-button color="warn" *ngIf="updatingProduct" (click)="cancelUpdate()">Cancel</button>
     <button class="inner" mat-flat-button color="warn" *ngIf="!updatingProduct" (click)="delete()">Delete</button>
-</div>
-<div id="metaProduct" class="product" *ngIf="showMeta">
+</mat-card>
+<mat-card id="metaProduct" class="product" *ngIf="showMeta">
+    <h1 class="product-header">Meta Product</h1>
     <h3 class="title">Name: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.name" [disabled]="!creatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.name" [disabled]="!creatingProduct">
     </mat-form-field><br>
     <h3 class="title">Type: </h3>
     <mat-form-field class="desc">
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.type" [disabled]="!creatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.type" [disabled]="!creatingProduct">
     </mat-form-field><br>
     <h3 class="title">Company: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="text" [(ngModel)]="currentProduct.company" [disabled]="!creatingProduct">
+        <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.company" [disabled]="!creatingProduct">
     </mat-form-field><br>
     <h3 class="title" *ngIf="!creatingProduct">Importer Price: </h3>
     <h3 class="title" *ngIf="creatingProduct">Normal Price: </h3>
     <mat-form-field>
-        <input class="desc" matInput type="number" [(ngModel)]="currentProduct.price" [disabled]="!creatingProduct">
+        <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.price" [disabled]="!creatingProduct">
     </mat-form-field><br>
     <div *ngIf="creatingProduct">
         <h3 class="title">Discount(percentage): </h3>
         <mat-form-field>
-            <input class="desc" matInput type="number" [(ngModel)]="newDiscount">
+            <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.discount">
         </mat-form-field><br>
         <h3 class="title">Description: </h3>
         <mat-form-field>
-            <input class="desc" matInput type="text" [(ngModel)]="newDescription">
+            <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.discription">
         </mat-form-field><br>
         <h3 class="title">Quantity: </h3>
         <mat-form-field>
-            <input class="desc" matInput type="number" [(ngModel)]="newQuantity">
+            <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.quantity">
         </mat-form-field><br>
     </div>
-    <mat-form-field *ngFor="let spec in currentProduct.specs">
+    <div *ngFor="let spec of tmpProduct.specs">
         <h3 class="title">{{ spec.title }}: </h3>
-        <input class="desc" matInput type="text" [(ngModel)]="spec.value" [disabled]="!creatingProduct">
-        <br>
-    </mat-form-field>
+        <mat-form-field>
+            <input class="desc" matInput type="text" [(ngModel)]="spec.value" [disabled]="!creatingProduct"><br>
+        </mat-form-field>
+    </div>
     <div *ngIf="creatingProduct">
         <h3 class="title">Show In Store: </h3>
-        <mat-checkbox class="checkbox" [(ngModel)]="newShowInStore" [checked]="newShowInStore"></mat-checkbox>
+        <mat-checkbox class="checkbox" [(ngModel)]="tmpProduct.showInStore" [checked]="tmpProduct.showInStore"></mat-checkbox>
         <br>
     </div>
     <button mat-flat-button class="inner" color="primary" *ngIf="!creatingProduct" (click)="createNewProduct()">Create New Product</button>
     <button mat-flat-button class="inner" color="primary" *ngIf="creatingProduct" (click)="saveCreate()">Save</button>
     <button mat-flat-button class="inner" color="warn" *ngIf="creatingProduct" (click)="cancelCreate()">Cancel</button>
-</div>
+</mat-card>

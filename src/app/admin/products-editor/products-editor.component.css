@@ -3,6 +3,11 @@
     margin: auto;
 }
 
+.product-header {
+    font-weight: bold;
+    text-align: center;
+}
+
 .title {
     display: inline-block;
     margin-right: 10px;

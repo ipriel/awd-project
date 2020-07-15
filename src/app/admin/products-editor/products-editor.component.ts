@@ -3,6 +3,8 @@ import { CommonModule } from "@angular/common";
 import { Observable } from 'rxjs';
 import { stringify } from 'querystring';
 import swal from 'sweetalert2';
+import { AdminService } from 'src/app/admin.service';
+import { SelectControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-products-editor',
@@ -11,11 +13,11 @@ import swal from 'sweetalert2';
 })
 export class ProductsEditorComponent implements OnInit {
 
-  private btnDisable: boolean = true;
-  private productSelected;
+  products: [];
   selectedType: number = 0; // either Shop or Meta
   selectedProduct; // product ID
   currentProduct;
+  tmpProduct;
   showProduct: boolean = false;
   showMeta: boolean = false;
 
@@ -36,7 +38,7 @@ export class ProductsEditorComponent implements OnInit {
 
   options : Array<any> = [];
 
-  constructor() { }
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
   }
@@ -46,65 +48,39 @@ export class ProductsEditorComponent implements OnInit {
     this.showMeta = false;
     this.showProduct = false;
     this.updatingProduct = false;
+    this.selectedType = 0;
 
     if (this.selectedType == 1) // Search shop products
     {
-      this.options = [
-        { name: "option1", value: 1 },
-        { name: "option2", value: 2 }];  
+      this.products = this.adminService.getShopProducts();
     }
     else if (this.selectedType == 2) // Search meta products
     {
-      this.options = [
-        { name: "option3", value: 3 },
-        { name: "option4", value: 4 }];  
+      this.products = this.adminService.getMetaProducts();
     }
   }
 
-  findProduct(productId): void {
+  findProduct(): void {
     // search product
+    this.currentProduct = this.adminService.findProductById(this.selectedProduct);
+
+    this.resetTmp();
 
     // if product found
     if (this.selectedType == 1)    
     {
-      this.currentProduct = {
-        name: "Samsung Galaxy",
-        type: 'Phone',
-        company: "Samsung",
-        price: "400",
-        description: "this is a phone",
-        discount: 0,
-        quantity: 5,
-        specs: [
-          { title: "x", value: 5 },
-          { title: "y", value: 6 }],
-        showInStore: true
-      };
-
       this.showProduct = true;
     }
     else if (this.selectedType == 2)
     {
-      this.currentProduct = {
-        name: "Samsung Galaxy",
-        type: "Phone",
-        company: "Samsung",
-        price: 350,
-        specs: [
-          { title: "x", value: 5 },
-          { title: "y", value: 6 }]
-      }
-
-      this.oldName = this.currentProduct.name;
-      this.oldType = this.currentProduct.type;
-      this.oldCompany = this.currentProduct.company;
-      this.oldPrice = this.currentProduct.price;
-      this.oldSpecs = this.currentProduct.specs;
+      // initialize tmpProduct
+      this.tmpProduct.discount = 0;
+      this.tmpProduct.quantity = 0;
+      this.tmpProduct.description = "";
+      this.tmpProduct.showInStore = false;
 
       this.showMeta = true;
     }
-
-    // else
   }
 
   delete()
@@ -118,11 +94,13 @@ export class ProductsEditorComponent implements OnInit {
       cancelButtonText: 'No!'
     }).then((result) => {
       if (result.value) {
-        swal.fire(
-          'Deleted!',
-          'The product was deleted from the shop database',
-          'success'
-        )
+
+        this.adminService.deleteProduct(this.selectedProduct).then((result) =>{
+          swal.fire(
+            'Deleted!',
+            'The product was deleted from the shop database',
+            'success');
+        });
       }
     });
   }
@@ -135,11 +113,35 @@ export class ProductsEditorComponent implements OnInit {
   cancelUpdate()
   {
     this.updatingProduct = false;
+
+    this.resetTmp();
   }
 
   saveUpdate() 
   {
-    this.updatingProduct = false;
+    // save product updates
+    swal.fire({
+      title: 'Update product?',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      showLoaderOnConfirm: true,      
+      preConfirm: () => {
+        return this.adminService.updateProduct(this.tmpProduct);
+      }          
+    }).then((result) => {
+        if (result.value) {
+          swal.fire(
+            'Product updated!',
+            'The product is up to date in the shop database',
+            'success'
+          );
+
+        this.updatingProduct = false;
+      }
+    });
+
+    // find product again to reset values
+    this.findProduct();
   }
 
   createNewProduct()
@@ -155,16 +157,17 @@ export class ProductsEditorComponent implements OnInit {
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Yes',
-      cancelButtonText: 'No'
+      cancelButtonText: 'No',
+      preConfirm: () => { return this.adminService.saveNewProduct(this.tmpProduct)}
     }).then((result) => {
+      // if user confirmed
       if (result.value) {
-        this.creatingProduct = false;
-
         swal.fire(
           'Saved!',
           'The product was in the shop database',
           'success'
-        )
+        );
+        this.creatingProduct = false;
       }
     });
   }
@@ -172,16 +175,21 @@ export class ProductsEditorComponent implements OnInit {
   cancelCreate()
   {
     this.creatingProduct = false;
+    
+    this.resetTmp();
+    this.tmpProduct.discount = 0;
+    this.tmpProduct.quantity = 0;
+    this.tmpProduct.description = "";
+    this.tmpProduct.showInStore = false;
+  }
 
-    this.currentProduct.name = this.oldName;
-    this.currentProduct.type = this.oldType;
-    this.currentProduct.company = this.oldCompany;
-    this.currentProduct.price = this.oldPrice;
-    this.currentProduct.specs = this.oldSpecs;
-    this.newDiscount = 0;
-    this.newDescription = "";
-    this.newQuantity = 0;
-    this.newShowInStore = false;
+  resetTmp()
+  {
+    this.tmpProduct = {...this.currentProduct};
+    this.tmpProduct.specs = [];
+    this.currentProduct.specs.forEach(spec => {
+      this.tmpProduct.specs.push({title: spec.title, value: spec.value});
+    });
   }
 
   isOptionsEmpty() : boolean {
