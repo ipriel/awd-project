@@ -1,10 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { AdminRoutingModule } from './admin-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { NgModule } from '@angular/core';
+// import { AdminComponent } from './admin.component';
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { MatCardModule } from '@angular/material/card';
+import { AdminRoutingModule } from './admin-routing.module';
 import { BarDirective } from './bar.directive';
+import { DashboardComponent } from './dashboard/dashboard.component';
 // import { AdminComponent } from './admin.component';
 
 
@@ -14,6 +15,7 @@ import { BarDirective } from './bar.directive';
     CommonModule,
     AdminRoutingModule,
     MatCardModule,
+    AngularFireAnalyticsModule
   ],
   declarations: [DashboardComponent, BarDirective]
 })

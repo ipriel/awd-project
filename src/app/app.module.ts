@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { AngularFireAnalyticsModule, CONFIG, ScreenTrackingService } from '@angular/fire/analytics';
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
@@ -8,15 +9,11 @@ import { AngularMaterialModel } from './angular-material.module';
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AuthModule } from "./auth/auth.module";
-import { BtoImgPipe } from './btoimg.pipe';
 import { FooterComponent } from "./footer/footer.component";
 import { HeaderComponent } from "./header/header.component";
 import { HomeComponent } from "./home/home.component";
+import { SharedModule } from "./shared/shared.module";
 import { UserProfileComponent } from "./store/user-profile/user-profile.component";
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -26,21 +23,29 @@ import { UserProfileComponent } from "./store/user-profile/user-profile.componen
     AboutComponent,
     FooterComponent,
     HomeComponent,
-    BtoImgPipe,
-    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AuthModule,
+    SharedModule,
     BrowserAnimationsModule,
     MatCarouselModule.forRoot(),
     RouterModule,
     AngularMaterialModel,
-    
+    AngularFireAnalyticsModule
   ],
-  providers: [],
+  providers: [
+    ScreenTrackingService,
+    {
+      provide: CONFIG, useValue: {
+        send_page_view: false,
+        allow_ad_personalization_signals: false,
+        anonymize_ip: true
+      }
+    }
+  ],
   bootstrap: [AppComponent],
-  
+
 })
-export class AppModule {}
+export class AppModule { }

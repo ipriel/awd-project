@@ -5,5 +5,6 @@ export const firebaseConfig = {
     projectId: "awd-project-f7bf9",
     storageBucket: "awd-project-f7bf9.appspot.com",
     messagingSenderId: "884912849063",
-    appId: "1:884912849063:web:5eb55b81ac92b202cfdb82"
+    appId: "1:884912849063:web:5eb55b81ac92b202cfdb82",
+    measurementId: "G-XXGR6W01K5"
 };
