@@ -1,9 +1,9 @@
-const fs = require('fs');
-const stringify = require('json-stable-stringify');
-const { scrape, render, urlBuilder, stripUrlParams, parseImage, parsePrice } = require('../util');
+const { scrape, render, urlBuilder, stripUrlParams, parseImage, parsePrice, save } = require('../util');
 const xeRate = 3.45624;
 
 async function runScraper() {
+    //console.log('Begin Scrapping - OnePlus');
+
     const host = 'https://www.oneplus.com/';
     const company = 'OnePlus';
     const $ = await scrape(host);
@@ -18,7 +18,7 @@ async function runScraper() {
 
         // If scraping succeeded, output results
         if (data.specs && data.specs.length > 0)
-            fs.writeFileSync('./scraper/output/' + data.name + '.json', stringify(data, { space: 2 }));
+            save(data);
     });
 
     const accessories = $(nav[1]);
@@ -26,7 +26,7 @@ async function runScraper() {
         const ref = urlBuilder(host, $(obj).attr('href'));
         try {
             let dataArr = await scrapeAccessoryType(company, $(obj).text(), ref);
-            dataArr.forEach(data => fs.writeFileSync('./scraper/output/' + data.name + '.json', stringify(data, { space: 2 })));
+            dataArr.forEach(data => save(data));
         } catch (err) {
             console.error(err);
         }
@@ -126,6 +126,8 @@ async function scrapeAccessoryType(company, type, url) {
                 specs: {}
             }
 
+            //console.log($('.accessory-name', accessory).text() + ' Start')
+
             const price = $('.accessory-price .price', accessory).text() ||
                 $('.accessory-price .discounted', accessory).text();
             data["list price"] = parsePrice(price, xeRate);
@@ -134,6 +136,8 @@ async function scrapeAccessoryType(company, type, url) {
             data.image = await parseImage(imgSrc);
             data.specs = await scrapeAccessory($('.accessory-card', accessory).attr('href'));
             dataArr.push(data);
+
+            //console.log(data.name + ' Complete')
         })
         .get();
 

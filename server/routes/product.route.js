@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { Product } = require('../models');
-const { verifyToken, hasRole } = require('./middleware/auth.middleware');
+const { Product } = require('../models/product.model');
+const { verifyToken, hasRole } = require('./plugins/auth.middleware');
+const { send } = require('process');
 
 // Create
 router.post('/', verifyToken, hasRole('admin'), (req, res) => {
     Product.create(req.body, (err, doc) => {
-        if(err) {
+        if (err) {
             return res.status(400).send(err);
         }
         res.status(201).send(doc);
@@ -16,30 +17,63 @@ router.post('/', verifyToken, hasRole('admin'), (req, res) => {
 // Read
 router.get('/:id', (req, res) => {
     Product.findById(req.params.id, (err, doc) => {
-        if(err) {
+        if (err) {
             return res.status(400).send(err);
         }
         res.send(doc);
+    });
+});
+
+router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
+    Product.countDocuments({showInStore: true}, (err, count) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(count);
     });
 });
 
 // Update
 router.put('/:id', verifyToken, hasRole('admin'), (req, res) => {
     Product.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
-        if(err) {
+        if (err) {
             return res.status(400).send(err);
         }
         res.send(doc);
     });
 });
 
+router.put('/:id/add-stock', verifyToken, hasRole('logistics'), (req, res) => {
+    Product.findByIdAndUpdate(req.params.id, { $inc: { quantity: req.body.count } }, (err, doc) => {
+        if (err)
+            return res.status(400).send(err);
+
+        res.send({ _id: doc._id, quantity: doc.quantity });
+    });
+});
+
+router.put('/pull-stock', verifyToken, hasRole('logistics'), (req, res) => {
+    Product.updateMany({
+        _id: { $in: req.body.ids },
+        quantity: {$gt: 0}
+    }, {$inc: {quantity: -1}}, {multi: true}, (err, _) => {
+        if (err)
+            return req.status(400).send(err);
+
+        if(status.matchedCount < req.body.ids) {
+            req.status(409).send('Some products were unavailable')
+        }
+        req.send('Success');
+    });
+});
+
 // Delete
 router.delete('/:id', verifyToken, hasRole('admin'), (req, res) => {
     Product.findOneAndDelete(req.params.id, (err, doc) => {
-        if(err) {
+        if (err)
             return res.status(400).send(err);
-        }
-        res.send({deleted: doc._id});
+
+        res.send({ deleted: doc._id });
     });
 });
 

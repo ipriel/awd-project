@@ -28,6 +28,7 @@ export class SocketService {
   }
 
   sendChat(message) {
+    this.chatSub.next({message, src: 'user'});
     this.socket.emit('chat:message', message, (data) => this.chatSub.next(data.response));
   }
 
