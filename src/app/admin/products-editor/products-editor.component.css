@@ -18,6 +18,17 @@
     display: inline-block !important;
 }
 
+.inner {
+    display: inline-block !important;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-right: 10px;
+}
+
+.outer {
+    text-align: center;
+}
+
 .checkbox {
     display: flex;
   align-content: center;
