@@ -1,7 +1,10 @@
-<mat-grid-list cols="8" rowHeight="500px">
+<mat-grid-list cols="8" rowHeight="100%">
   <mat-grid-tile [colspan]="4" class="tile-card-container">
     <div class="card-container">
-      <mat-card *ngFor="let product of cartProducts" class="example">
+      <mat-card
+        *ngFor="let product of productService.shoppingCart"
+        class="example"
+      >
         <!--might change here the route-->
         <a [routerLink]="['/products/product', product.productId]">
           <img
@@ -24,15 +27,23 @@
           >
           <p style="text-align: center;">{{ product.productDescription }}</p>
           <mat-divider></mat-divider>
-          <span class="item-price"><p style="text-align: center;">$ {{ product.productPrice }}</p>
-            <button mat-icon-button (click)="removeCartProd(product)"><mat-icon>cancel</mat-icon></button>
-            </span>
+          <span class="item-price"
+            ><p style="text-align: center;">$ {{ product.productPrice }}</p>
+            <button
+              mat-icon-button
+              (click)="
+                productService.removeProductFromShoppingCart(product.productId)
+              "
+            >
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </span>
         </mat-card-content>
       </mat-card>
     </div>
   </mat-grid-tile>
 
   <mat-grid-tile [colspan]="4">
-    <app-cart-calc [products]="cartProducts"></app-cart-calc>
+    <app-cart-calc [products]="productService.shoppingCart"></app-cart-calc>
   </mat-grid-tile>
 </mat-grid-list>

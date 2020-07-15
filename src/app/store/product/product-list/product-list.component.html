@@ -1,1 +1,32 @@
-<p>product-list works!</p>
+<div class="products-container">
+  <mat-card *ngFor="let product of products" class="product">
+    <!--might change here the route-->
+    <a [routerLink]="['product-details', product.productId]">
+      <img [src]="product.productImage" alt="" />
+    </a>
+    <mat-card-content>
+      <mat-card-subtitle style="text-align: center;"
+        ><h3>{{ product.productCategory }}</h3></mat-card-subtitle
+      >
+      <a
+        [routerLink]="['product-details', product.productId]"
+        style="text-decoration: none;"
+        ><h4 style="text-align: center;">
+          <strong>{{ product.productName }}</strong>
+        </h4></a
+      >
+      <p style="text-align: center;">{{ product.productDescription }}</p>
+
+      <span class="item-price"
+        ><p style="text-align: center;">$ {{ product.productPrice }}</p>
+        <button
+          mat-icon-button
+          (click)="addProduct(product)"
+          class="shopping-button"
+        >
+          <mat-icon>shopping_cart</mat-icon>
+        </button>
+      </span>
+    </mat-card-content>
+  </mat-card>
+</div>
