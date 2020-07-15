@@ -1,11 +1,12 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 import * as d3 from 'd3';
+import { DataPoint } from '../shared/types';
 
 @Directive({
   selector: '[appBar]'
 })
 export class BarDirective {
-  @Input() dataSource: Array<any>;
+  @Input() dataSource: DataPoint[];
   @Input() width: number;
   @Input() height: number;
 
