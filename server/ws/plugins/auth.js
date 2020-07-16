@@ -1,13 +1,7 @@
-const admin = require('firebase-admin');
-var serviceAccount = require("../firebase-secret.json");
+const admin = require('../../firebase-init');
 
 module.exports = {
     init: (io) => {
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
-            databaseURL: "https://awd-project-f7bf9.firebaseio.com"
-        });
-
         // token middleware
         io.use(async (socket, next) => {
             const idToken = socket.handshake.query.token;

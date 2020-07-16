@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { ProductMeta } = require('../models/product-meta.model');
-const { verifyToken, hasRole, hasRoles } = require('./middleware/auth.middleware');
+const { verifyToken, hasRole, hasRoles } = require('./plugins/auth.middleware');
 
 // Create
 router.post('/', verifyToken, hasRoles(['admin', 'logistics'], false), (req, res) => {
