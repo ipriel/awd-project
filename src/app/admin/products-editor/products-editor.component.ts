@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { Observable } from 'rxjs';
-import { stringify } from 'querystring';
 import swal from 'sweetalert2';
-import { AdminService } from 'src/app/admin.service';
-import { SelectControlValueAccessor } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { AdminService } from 'src/app/admin/admin.service';
+import { SelectOption } from 'src/app/shared/types';
 
 @Component({
   selector: 'app-products-editor',
@@ -13,7 +11,7 @@ import { SelectControlValueAccessor } from '@angular/forms';
 })
 export class ProductsEditorComponent implements OnInit {
 
-  products: [];
+  products: SelectOption[];
   selectedType: number = 0; // either Shop or Meta
   selectedProduct; // product ID
   currentProduct;
@@ -26,17 +24,6 @@ export class ProductsEditorComponent implements OnInit {
 
   // meta variables
   creatingProduct: boolean = false;
-  oldName: string;
-  oldType: string;
-  oldCompany: string;
-  oldPrice: number;
-  oldSpecs: Array<any> = [];
-  newDescription: string = "";
-  newDiscount: number = 0;
-  newQuantity: number = 0;
-  newShowInStore: boolean = false;
-
-  options : Array<any> = [];
 
   constructor(private adminService: AdminService) { }
 
@@ -44,7 +31,7 @@ export class ProductsEditorComponent implements OnInit {
   }
 
   searchProducts(): void {
-    this.options = [];
+    this.products = [];
     this.showMeta = false;
     this.showProduct = false;
     this.updatingProduct = false;
@@ -52,30 +39,51 @@ export class ProductsEditorComponent implements OnInit {
 
     if (this.selectedType == 1) // Search shop products
     {
-      this.products = this.adminService.getShopProducts();
+      this.adminService.getProducts().subscribe( res => this.products = res);
     }
     else if (this.selectedType == 2) // Search meta products
     {
-      this.products = this.adminService.getMetaProducts();
+      this.adminService.getMetaProducts().subscribe( res => this.products = res);
     }
   }
 
   findProduct(): void {
-    // search product
-    this.currentProduct = this.adminService.findProductById(this.selectedProduct);
 
     this.resetTmp();
 
     // if product found
-    if (this.selectedType == 1)    
+    if (this.selectedType == 1) // shop product
     {
+      // search product
+      this.adminService.getProductById(this.selectedProduct).subscribe( (res) => {
+        this.currentProduct._id = res._id;
+        this.currentProduct.name = res.name;
+        this.currentProduct.type = res.type;
+        this.currentProduct.company = res.company;
+        this.currentProduct.price = res.price;
+        this.currentProduct.discount = res.discount;
+        this.currentProduct.description = res.description;
+        this.currentProduct.specs = res.specs;
+        this.currentProduct.showInStore = res.showInStore;
+      });
+
       this.showProduct = true;
     }
-    else if (this.selectedType == 2)
+    else if (this.selectedType == 2) // meta product
     {
+      // search product
+      this.adminService.getProductById(this.selectedProduct).subscribe( (res) => {
+        this.currentProduct.name = res.name;
+        this.currentProduct.type = res.type;
+        this.currentProduct.company = res.company;
+        this.currentProduct.price = res.price;
+        this.currentProduct.specs = res.specs;
+      });
+      
+      this.tmpProduct = {...this.currentProduct};
+
       // initialize tmpProduct
       this.tmpProduct.discount = 0;
-      this.tmpProduct.quantity = 0;
       this.tmpProduct.description = "";
       this.tmpProduct.showInStore = false;
 
@@ -95,13 +103,13 @@ export class ProductsEditorComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
 
-        this.adminService.deleteProduct(this.selectedProduct).then((result) =>{
-          swal.fire(
-            'Deleted!',
-            'The product was deleted from the shop database',
-            'success');
-        });
+        return this.adminService.deleteProduct(this.selectedProduct);
       }
+    }).then(() => {
+      swal.fire(
+        'Deleted!',
+        'The product was deleted from the shop database',
+        'success');
     });
   }
 
@@ -167,6 +175,7 @@ export class ProductsEditorComponent implements OnInit {
           'The product was in the shop database',
           'success'
         );
+
         this.creatingProduct = false;
       }
     });
@@ -178,7 +187,6 @@ export class ProductsEditorComponent implements OnInit {
     
     this.resetTmp();
     this.tmpProduct.discount = 0;
-    this.tmpProduct.quantity = 0;
     this.tmpProduct.description = "";
     this.tmpProduct.showInStore = false;
   }
@@ -193,7 +201,7 @@ export class ProductsEditorComponent implements OnInit {
   }
 
   isOptionsEmpty() : boolean {
-    if (this.options.length > 0) return false;
+    if (this.products.length > 0) return false;
 
     return true;
   }

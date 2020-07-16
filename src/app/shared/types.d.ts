@@ -14,6 +14,16 @@ export type DataPoint = {
     value: number
 }
 
+export type SelectOption = {
+    _id: ObjectId,
+    name: string
+};
+
+export type ProductSpec = {
+    title: string,
+    value: string
+};
+
 export type Address = {
     firstName: string,
     lastName: string,

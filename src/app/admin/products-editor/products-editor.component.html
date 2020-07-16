@@ -16,7 +16,7 @@
         <mat-form-field appearance="fill">
             <mat-label>Choose Product</mat-label>
             <mat-select placeholder="Products" [disabled]="isOptionsEmpty()" (selectionChange)="findProduct()" [(ngModel)]="selectedProduct">
-                <mat-option *ngFor="let o of options" [value]="o.value">{{ o.name }}</mat-option>
+                <mat-option *ngFor="let p of products" [value]="p.ObjectId">{{ p.name }}</mat-option>
             </mat-select>
         </mat-form-field>
     </mat-grid-tile>
@@ -50,12 +50,10 @@
     <mat-form-field>
         <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.description" [disabled]="!updatingProduct">
     </mat-form-field><br>
-    <h3 class="title">Quantity: </h3>
-    <mat-form-field>
-        <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.quantity" [disabled]="!updatingProduct">
-    </mat-form-field><br>
     <div *ngFor="let spec of tmpProduct.specs">
-        <h3 class="title">{{ spec.title }}: </h3>
+        <mat-form-field>
+            <input class="title" matInput type="text" [(ngModel)]="spec.title" [disabled]="!creatingProduct"><br>
+        </mat-form-field>
         <mat-form-field>
             <input class="desc" matInput type="text" [(ngModel)]="spec.value" [disabled]="!updatingProduct">
         </mat-form-field><br>
@@ -96,13 +94,11 @@
         <mat-form-field>
             <input class="desc" matInput type="text" [(ngModel)]="tmpProduct.discription">
         </mat-form-field><br>
-        <h3 class="title">Quantity: </h3>
-        <mat-form-field>
-            <input class="desc" matInput type="number" [(ngModel)]="tmpProduct.quantity">
-        </mat-form-field><br>
     </div>
     <div *ngFor="let spec of tmpProduct.specs">
-        <h3 class="title">{{ spec.title }}: </h3>
+        <mat-form-field>
+            <input class="title" matInput type="text" [(ngModel)]="spec.title" [disabled]="!creatingProduct"><br>
+        </mat-form-field>
         <mat-form-field>
             <input class="desc" matInput type="text" [(ngModel)]="spec.value" [disabled]="!creatingProduct"><br>
         </mat-form-field>
