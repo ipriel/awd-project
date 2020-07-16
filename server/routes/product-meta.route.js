@@ -23,6 +23,15 @@ router.get('/:id', verifyToken, hasRole('admin'), (req, res) => {
     });
 });
 
+router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
+    ProductMeta.find({}, '_id name', (err, products) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(products);
+    });
+});
+
 // Update
 router.put('/:id', verifyToken, hasRole('admin'), (req, res) => {
     ProductMeta.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
