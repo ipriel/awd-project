@@ -33,6 +33,15 @@ router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
     });
 });
 
+router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
+    Product.find({}, '_id name', (err, products) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(products);
+    });
+});
+
 // Update
 router.put('/:id', verifyToken, hasRole('admin'), (req, res) => {
     Product.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
@@ -56,7 +65,7 @@ router.put('/pull-stock', verifyToken, hasRole('logistics'), (req, res) => {
     Product.updateMany({
         _id: { $in: req.body.ids },
         quantity: {$gt: 0}
-    }, {$inc: {quantity: -1}}, {multi: true}, (err, _) => {
+    }, {$inc: {quantity: -1}}, {multi: true}, (err, status) => {
         if (err)
             return req.status(400).send(err);
 
