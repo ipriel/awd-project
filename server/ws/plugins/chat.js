@@ -37,10 +37,7 @@ async function listen(socket) {
         try {
             const res = await queryAssistant(msg, sessionId);
 
-            cb({
-                response: res.output.generic,
-                intents: res.output.intents
-            });
+            cb(res.output.generic);
         } catch (error) {
             console.error(error);
             socket.emit('chat:error', {
