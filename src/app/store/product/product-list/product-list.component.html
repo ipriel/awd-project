@@ -1,24 +1,24 @@
 <div class="products-container">
-  <mat-card *ngFor="let product of products" class="product">
+  <mat-card *ngFor="let product of products$ | async" class="product">
     <!--might change here the route-->
-    <a [routerLink]="['product-details', product.productId]">
-      <img [src]="product.productImage" alt="" />
+    <a [routerLink]="['product-details', product.productID]">
+      <img [src]="product.image|btoimg" alt="" />
     </a>
     <mat-card-content>
       <mat-card-subtitle style="text-align: center;"
-        ><h3>{{ product.productCategory }}</h3></mat-card-subtitle
+        ><h3>{{ product.type }}</h3></mat-card-subtitle
       >
       <a
-        [routerLink]="['product-details', product.productId]"
+        [routerLink]="['product-details', product.productID]"
         style="text-decoration: none;"
         ><h4 style="text-align: center;">
-          <strong>{{ product.productName }}</strong>
+          <strong>{{ product.name }}</strong>
         </h4></a
       >
-      <p style="text-align: center;">{{ product.productDescription }}</p>
+      <p style="text-align: center;">{{ product.description }}</p>
 
       <span class="item-price"
-        ><p style="text-align: center;">$ {{ product.productPrice }}</p>
+        ><p style="text-align: center;">$ {{ product.price }}</p>
         <button
           mat-icon-button
           (click)="addProduct(product)"

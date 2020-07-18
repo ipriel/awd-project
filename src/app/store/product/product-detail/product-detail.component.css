@@ -4,8 +4,8 @@
 }
 
 .container {
-  margin-left: 15%;
-  margin-top: 2%;
+
+  margin-top: 50px;
   width: 20rem;
 }
 
@@ -41,9 +41,6 @@
   margin: auto;
 }
 
-.see {
-  height: 260px;
-}
 
 td {
   margin: auto;

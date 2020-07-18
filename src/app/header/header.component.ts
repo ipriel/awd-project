@@ -20,8 +20,8 @@ export class HeaderComponent implements OnInit {
   }
 
   numOfProd() {
-    if (this.productService.shoppingCart.length > 0)
-      return this.productService.shoppingCart.length;
+    if (this.productService.shoppingCart.size > 0)
+      return this.productService.shoppingCart.size;
   }
 
   constructor(public productService: ProductService) {}

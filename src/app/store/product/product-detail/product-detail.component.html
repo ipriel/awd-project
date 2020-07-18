@@ -1,25 +1,21 @@
-<div class="group">
+<div class="group" *ngIf="product$ | async as product">
   <div class="container">
     <mat-card class="magic">
-      <img
-        mat-card-image
-        src="https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg"
-        alt="{{ product.productName }}"
-      />
+      <img mat-card-image [src]="product.image | btoimg" alt="{{ product.name }}" />
     </mat-card>
 
     <mat-card class="spacer">
       <mat-card-title>Product Price</mat-card-title>
-      <mat-card-content>something</mat-card-content>
+      <mat-card-content>{{ product.price }}</mat-card-content>
     </mat-card>
     <mat-card class="space">
       <mat-card-title>Product Seller</mat-card-title>
-      <mat-card-content>something</mat-card-content>
+      <mat-card-content>{{ product.company }}</mat-card-content>
     </mat-card>
     <button
       mat-raised-button
       color="primary"
-      (click)="addToCart()"
+      (click)="addToCart(product)"
       class="cart"
     >
       Add to Cart
@@ -36,27 +32,27 @@
           <mat-divider></mat-divider>
           <tr>
             <th>Product Name</th>
-            <td>{{ product.productName }}</td>
+            <td>{{ product.name }}</td>
           </tr>
           <mat-divider></mat-divider>
           <tr>
             <th>Product Description</th>
-            <td>{{ product.productDescription }}</td>
+            <td>{{ product.description }}</td>
           </tr>
           <mat-divider></mat-divider>
           <tr>
             <th>Product Category</th>
-            <td>{{ product.productCategory }}</td>
+            <td>{{ product.type }}</td>
           </tr>
           <mat-divider></mat-divider>
           <tr>
             <th>No. of quantity available</th>
-            <td>{{ product.productQuantity }}</td>
+            <td>{{ product.quantity }}</td>
           </tr>
           <mat-divider></mat-divider>
           <tr>
-            <th>Product Added on</th>
-            <td></td>
+            <th>Specs</th>
+            <td>{{ stringifySpecs(product) }}</td>
           </tr>
         </tbody>
       </mat-card-content>

@@ -9,14 +9,13 @@ import { Observable } from "rxjs";
   styleUrls: ["./product-list.component.css"],
 })
 export class ProductListComponent implements OnInit {
-  products: Product[];
+  products$: Observable<Product[]>;
 
   constructor(public productService: ProductService) {}
 
   ngOnInit(): void {
-    this.productService
+    this.products$ = this.productService
       .getProducts()
-      .subscribe((products) => (this.products = products));
   }
 
   addProduct(product: Product) {

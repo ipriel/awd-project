@@ -5,7 +5,9 @@ export type DocumentRef<T> = T | ObjectId;
 export type MixedSchema = { [key: string]: any };
 
 export type ImageData = {
-    data: ArrayBuffer,
+    data: {
+        data: ArrayBuffer
+    },
     contentType: string
 };
 
