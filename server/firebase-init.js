@@ -23,4 +23,4 @@ if (typeof app == 'undefined') {
     });
 }
 
-module.exports.admin = admin;
+module.exports = app.auth();

@@ -1,4 +1,4 @@
-const admin = require('../../firebase-init');
+const auth = require('../../firebase-init');
 
 module.exports = {
     init: (io) => {
@@ -9,7 +9,7 @@ module.exports = {
                 return next();
 
             try {
-                const token = await admin.auth().verifyIdToken(idToken);
+                const token = await auth.verifyIdToken(idToken);
                 socket.username = token.uid;
                 next();
             } catch (error) {
