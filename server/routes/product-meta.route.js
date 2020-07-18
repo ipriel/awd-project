@@ -13,25 +13,6 @@ router.post('/', verifyToken, hasRoles(['admin', 'logistics'], false), (req, res
     });
 });
 
-// Read
-router.get('/:id', verifyToken, hasRole('admin'), (req, res) => {
-    ProductMeta.findById(req.params.id, (err, doc) => {
-        if(err) {
-            return res.status(400).send(err);
-        }
-        res.send(doc);
-    });
-});
-
-router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
-    ProductMeta.find({}, '_id name', (err, products) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.send(products);
-    });
-});
-
 // Update
 router.put('/:id', verifyToken, hasRole('admin'), (req, res) => {
     ProductMeta.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
@@ -51,5 +32,26 @@ router.delete('/:id', verifyToken, hasRole('admin'), (req, res) => {
         res.send({deleted: doc._id});
     });
 });
+
+// Read
+router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
+    ProductMeta.find({}, '_id name', (err, products) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(products);
+    });
+});
+
+router.get('/:id', verifyToken, hasRole('admin'), (req, res) => {
+    ProductMeta.findById(req.params.id, (err, doc) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).send(err);
+        }
+        res.send(doc);
+    });
+});
+
 
 module.exports = router;

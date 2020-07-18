@@ -1,11 +1,21 @@
-const admin = require("../../firebase-init");
+const auth = require("../../firebase-init");
 
 function verifyToken(req, res, next) {
-    admin.auth().verifyIdToken(idToken)
+    const authHeader = req.headers.authorization;
+
+    if (typeof authHeader == 'undefined' || authHeader == null) {
+        console.error('Error: No Auth Header')
+        return res.sendStatus(401);
+    }
+    
+    const idToken = authHeader.split(' ')[1];
+
+    auth.verifyIdToken(idToken)
         .then(function (decodedToken) {
             req.uid = decodedToken.uid;
             next();
         }).catch(function (err) {
+            console.log(err);
             res.status(401).send(err);
         });
 }
@@ -14,6 +24,9 @@ function getClaims(uid) {
     return admin.auth().getUser(uid)
         .then((user) => {
             return user.customClaims;
+        }).catch(function (err) {
+            console.log(err);
+            res.status(401).send(err);
         });
 }
 
