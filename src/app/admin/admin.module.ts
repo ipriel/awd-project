@@ -1,33 +1,32 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatGridListModule} from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+// import { AdminComponent } from './admin.component';
+import { ReactiveFormsModule } from '@angular/forms';
+//import { BrowserModule } from '@angular/platform-browser';
+import { AngularMaterialModule } from '../angular-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { BarDirective } from './bar.directive';
 import { DashboardComponent } from './dashboard/dashboard.component';
-// import { AdminComponent } from './admin.component';
+import { ProductsEditorComponent } from './products-editor/products-editor.component';
 
 
 @NgModule({
   // declarations: [AdminComponent],
   imports: [
     CommonModule,
+  //  BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
     AdminRoutingModule,
-    MatCardModule,
-    AngularFireAnalyticsModule,
-    MatSelectModule,
-    MatDividerModule,
-    MatGridListModule,
-    MatInputModule,
-    FormsModule,
-    MatCheckboxModule
+    AngularMaterialModule,
+    AngularFireAnalyticsModule
   ],
-  declarations: [DashboardComponent, BarDirective]
+  declarations: [
+    DashboardComponent,
+    ProductsEditorComponent,
+    BarDirective
+  ]
 })
 export class AdminModule { }

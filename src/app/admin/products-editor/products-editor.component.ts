@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import swal from 'sweetalert2';
-import { Observable } from 'rxjs';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject, combineLatest, Observable, Subscriber, Subscription } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { AdminService } from 'src/app/admin/admin.service';
-import { SelectOption } from 'src/app/shared/types';
+import { ImageData, ObjectId, Product, SelectOption } from 'src/app/shared/types';
+import swal from 'sweetalert2';
+
+enum ObjectType {
+  NONE,
+  SHOP,
+  META
+}
 
 @Component({
   selector: 'app-products-editor',
@@ -11,13 +19,16 @@ import { SelectOption } from 'src/app/shared/types';
 })
 export class ProductsEditorComponent implements OnInit {
 
-  products: SelectOption[];
-  selectedType: number = 0; // either Shop or Meta
-  selectedProduct; // product ID
-  currentProduct;
-  tmpProduct;
-  showProduct: boolean = false;
-  showMeta: boolean = false;
+  productForm: FormGroup;
+  typeSelect = new FormControl(0);
+  productSelect = new FormControl('');
+  products$: Observable<SelectOption[]>;
+  currentProduct$: Observable<Product>;
+  formReady$: Observable<any>;
+
+  resetSignal = new BehaviorSubject(false);
+  showProduct = false;
+  showMeta = false;
 
   // shop variables
   updatingProduct: boolean = false;
@@ -25,74 +36,128 @@ export class ProductsEditorComponent implements OnInit {
   // meta variables
   creatingProduct: boolean = false;
 
-  constructor(private adminService: AdminService) { }
+  ngOnInit() {
+    this.products$ = this.typeSelect.valueChanges.pipe(
+      tap(() => {
+        this.showMeta = false;
+        this.showProduct = false;
+        this.updatingProduct = false;
+      }),
+      switchMap((type: ObjectType) => this.switchHttp(
+        this.adminService.getProducts(),
+        this.adminService.getMetaProducts(),
+        type
+      ))
+    );
 
-  ngOnInit(): void {
+    this.currentProduct$ = combineLatest([
+      this.typeSelect.valueChanges,
+      this.productSelect.valueChanges,
+    ]).pipe(
+      switchMap(([type, id]: [ObjectType, ObjectId]) => combineLatest(
+        this.switchHttp(
+          this.adminService.getProductById(id),
+          this.adminService.getMetaProductById(id),
+          type
+        ),
+        this.resetSignal.asObservable()
+      )),
+      map(([val, _]) => val),
+      map((product: Partial<Product> & { importerPrice?: number }) => {
+        if (this.typeSelect.value == ObjectType.META) {
+          product.discount = 0;
+          product.description = '';
+          product.showInStore = false;
+          product.price = product.importerPrice || 0;
+        }
+
+        return product as Product;
+      }),
+      tap((product: Product) => {
+        this.productForm = this.buildForm(product);
+      }),
+      tap(() => {
+        if (this.typeSelect.value == ObjectType.SHOP)
+          this.showProduct = true;
+        else if (this.typeSelect.value == ObjectType.META)
+          this.showMeta = true;
+      })
+    );
   }
 
-  searchProducts(): void {
-    this.products = [];
-    this.showMeta = false;
-    this.showProduct = false;
-    this.updatingProduct = false;
-    this.selectedType = 0;
+  private switchHttp<L, R>(shop: Observable<L>, meta: Observable<R>, currentType: ObjectType): Observable<L | R> {
+    const hooks = (subscriber: Subscriber<L | R>) => ({
+      next: (value) => subscriber.next(value),
+      error: (error) => subscriber.error(error),
+      complete: () => subscriber.complete()
+    });
 
-    if (this.selectedType == 1) // Search shop products
-    {
-      this.adminService.getProducts().subscribe( res => this.products = res);
-    }
-    else if (this.selectedType == 2) // Search meta products
-    {
-      this.adminService.getMetaProducts().subscribe( res => this.products = res);
-    }
+    return new Observable(subscriber => {
+      const subSink = new Subscription();
+
+      if (this.typeSelect.value == ObjectType.SHOP)
+        subSink.add(shop.subscribe(hooks(subscriber)));
+      else if (this.typeSelect.value == ObjectType.META)
+        subSink.add(meta.subscribe(hooks(subscriber)));
+
+      return () => subSink.unsubscribe();
+    });
   }
 
-  findProduct(): void {
-
-    this.resetTmp();
-
-    // if product found
-    if (this.selectedType == 1) // shop product
-    {
-      // search product
-      this.adminService.getProductById(this.selectedProduct).subscribe( (res) => {
-        this.currentProduct._id = res._id;
-        this.currentProduct.name = res.name;
-        this.currentProduct.type = res.type;
-        this.currentProduct.company = res.company;
-        this.currentProduct.price = res.price;
-        this.currentProduct.discount = res.discount;
-        this.currentProduct.description = res.description;
-        this.currentProduct.specs = res.specs;
-        this.currentProduct.showInStore = res.showInStore;
+  private buildForm(data: {}) {
+    const entries = Object.entries(data);
+    const group = new FormGroup({});
+    
+    for (let [key, val] of entries) {
+      let control;
+      console.log({
+        key,
+        val,
+        type: typeof val,
+        array: this.isArray(val)
       });
 
-      this.showProduct = true;
+      if (this.isArray(val)) {
+        const controlArr = (val as Array<any>).map(elem => new FormControl(elem));
+        control = new FormArray(controlArr);
+        console.log({key, control});
+      }
+      else if (this.isObject(val)) {
+        console.log({ key, val });
+        control = this.buildForm(val);
+      }
+      else {
+        control = new FormControl(val);
+      }
+      group.addControl(key, control);
     }
-    else if (this.selectedType == 2) // meta product
-    {
-      // search product
-      this.adminService.getProductById(this.selectedProduct).subscribe( (res) => {
-        this.currentProduct.name = res.name;
-        this.currentProduct.type = res.type;
-        this.currentProduct.company = res.company;
-        this.currentProduct.price = res.price;
-        this.currentProduct.specs = res.specs;
-      });
-      
-      this.tmpProduct = {...this.currentProduct};
-
-      // initialize tmpProduct
-      this.tmpProduct.discount = 0;
-      this.tmpProduct.description = "";
-      this.tmpProduct.showInStore = false;
-
-      this.showMeta = true;
-    }
+    
+    return group;
   }
 
-  delete()
-  {
+  isArray(obj: any) {
+    return Array.isArray(obj);
+  }
+
+  isString(obj: any) {
+    return typeof obj == 'string';
+  }
+
+  isNumber(obj: any) {
+    return typeof obj == 'number';
+  }
+
+  isObject(obj: any) {
+    return typeof obj == 'object'
+      && !this.isArray(obj)
+      && !(obj as ImageData).contentType;
+  }
+
+  getFormArray(formArrayName: string): FormArray {
+    return this.productForm.get(formArrayName) as FormArray;
+  }
+
+  delete(product: Product) {
     swal.fire({
       title: 'Are you sure?',
       text: 'You will not be able to recover once you delete it.',
@@ -101,10 +166,8 @@ export class ProductsEditorComponent implements OnInit {
       confirmButtonText: 'Yes',
       cancelButtonText: 'No!'
     }).then((result) => {
-      if (result.value) {
-
-        return this.adminService.deleteProduct(this.selectedProduct);
-      }
+      if (result.value)
+        return this.adminService.deleteProduct(product._id);
     }).then(() => {
       swal.fire(
         'Deleted!',
@@ -113,52 +176,46 @@ export class ProductsEditorComponent implements OnInit {
     });
   }
 
-  updateProduct()
-  {
+  updateProduct() {
     this.updatingProduct = true;
   }
 
-  cancelUpdate()
-  {
+  cancelUpdate() {
     this.updatingProduct = false;
 
-    this.resetTmp();
+    this.resetForm();
   }
 
-  saveUpdate() 
-  {
+  saveUpdate(product: Product) {
     // save product updates
     swal.fire({
       title: 'Update product?',
       confirmButtonText: 'Yes',
       cancelButtonText: 'No',
-      showLoaderOnConfirm: true,      
+      showLoaderOnConfirm: true,
       preConfirm: () => {
-        return this.adminService.updateProduct(this.tmpProduct);
-      }          
+        return this.adminService.updateProduct(product);
+      }
     }).then((result) => {
-        if (result.value) {
-          swal.fire(
-            'Product updated!',
-            'The product is up to date in the shop database',
-            'success'
-          );
+      if (result.value) {
+        swal.fire(
+          'Product updated!',
+          'The product is up to date in the shop database',
+          'success'
+        );
 
         this.updatingProduct = false;
       }
     });
 
-    // find product again to reset values
-    this.findProduct();
+    this.resetForm();
   }
 
-  createNewProduct()
-  {
+  createNewProduct() {
     this.creatingProduct = true;
   }
 
-  saveCreate()
-  {
+  saveCreate(product: Product) {
     swal.fire({
       title: 'Are you sure?',
       text: 'Your new product will be saved in the shop database.',
@@ -166,7 +223,7 @@ export class ProductsEditorComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Yes',
       cancelButtonText: 'No',
-      preConfirm: () => { return this.adminService.saveNewProduct(this.tmpProduct)}
+      preConfirm: () => { return this.adminService.saveNewProduct(product) }
     }).then((result) => {
       // if user confirmed
       if (result.value) {
@@ -181,28 +238,14 @@ export class ProductsEditorComponent implements OnInit {
     });
   }
 
-  cancelCreate()
-  {
+  cancelCreate() {
     this.creatingProduct = false;
-    
-    this.resetTmp();
-    this.tmpProduct.discount = 0;
-    this.tmpProduct.description = "";
-    this.tmpProduct.showInStore = false;
+    this.resetForm();
   }
 
-  resetTmp()
-  {
-    this.tmpProduct = {...this.currentProduct};
-    this.tmpProduct.specs = [];
-    this.currentProduct.specs.forEach(spec => {
-      this.tmpProduct.specs.push({title: spec.title, value: spec.value});
-    });
+  resetForm() {
+    this.resetSignal.next(true);
   }
 
-  isOptionsEmpty() : boolean {
-    if (this.products.length > 0) return false;
-
-    return true;
-  }
+  constructor(private adminService: AdminService) { }
 }

@@ -33,7 +33,6 @@ export class BarDirective {
     this.gy = this.mainContainer.append('g').attr('class', 'axis axis--y');
     this.gx = this.mainContainer.append('g').attr('class', 'axis axis--x');
     this.draw();
-    window.addEventListener('resize', this.resize.bind(this));
   }
 
   private resize() {

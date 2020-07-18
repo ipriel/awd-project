@@ -12,7 +12,6 @@ const routes: Routes = [
     path: 'products',
     component: ProductsEditorComponent
   }
-  /* { path: '', component: AdminComponent } */
 ];
 
 @NgModule({
