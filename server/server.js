@@ -12,8 +12,10 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-routes.register(app);
-ws.init(app);
+routes.register(app, __dirname);
+const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+ws.init(server);
+//ws.init(app);
 scraper.initScheduler();
 
 mongoose.Promise = Promise;
@@ -30,4 +32,4 @@ db.once('open', () => {
   console.log('Connection to MongoDB successful')
 });
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+//app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
