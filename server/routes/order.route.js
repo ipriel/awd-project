@@ -14,28 +14,6 @@ router.post('/', verifyToken, (req, res) => {
     });
 });
 
-// Read
-router.get('/:id', verifyToken, isUserOrHasRoles(['admin', 'logistics'], false), (req, res) => {
-    Order.findById(req.params.id, (err, doc) => {
-        if(err) {
-            return res.status(400).send(err);
-        }
-        res.send(doc);
-    });
-});
-
-router.get('/analytics/income/today', verifyToken, hasRole('admin'), (req, res) => {
-    Order.aggregate([
-        { $match: { date: {$eq: new Date(),} } },
-        { $group: { income: { $sum: "$totalPrice" } } }
-    ]).exec((err, doc) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.send(doc.income);
-    });
-});
-
 router.get('/analytics/income/daily', verifyToken, hasRole('admin'), (req, res) => {
     Order.aggregate([
         { $group: { name: { $dateToString: { format: "%d/%m", date: "$date" } }, value: { $sum: "$totalPrice" } } }
@@ -64,6 +42,28 @@ router.delete('/:id', verifyToken, isUser, (req, res) => {
             return res.status(400).send(err);
         }
         res.send({deleted: doc._id});
+    });
+});
+
+// Read
+router.get('/analytics/income/today', verifyToken, hasRole('admin'), (req, res) => {
+    Order.aggregate([
+        { $match: { date: {$eq: new Date(),} } },
+        { $group: { income: { $sum: "$totalPrice" } } }
+    ]).exec((err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(doc.income);
+    });
+});
+
+router.get('/:id', verifyToken, isUserOrHasRoles(['admin', 'logistics'], false), (req, res) => {
+    Order.findById(req.params.id, (err, doc) => {
+        if(err) {
+            return res.status(400).send(err);
+        }
+        res.send(doc);
     });
 });
 

@@ -9,12 +9,14 @@ const scraper = require('./scraper');
 
 const port = process.env.PORT || 3000;
 
+scraper.initScheduler();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+routes.register(app, __dirname);
 
-routes.register(app);
-ws.init(app);
-scraper.initScheduler();
+const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+ws.init(server);
 
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI, {
@@ -30,4 +32,4 @@ db.once('open', () => {
   console.log('Connection to MongoDB successful')
 });
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+//app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));

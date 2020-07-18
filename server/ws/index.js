@@ -4,17 +4,15 @@ const chat = require('./plugins/chat');
 const pushUpdater = require('./plugins/push-updater');
 const auth = require('./plugins/auth');
 const search = require('./plugins/search');
-const { auth } = require('firebase-admin');
 
 module.exports = {
-    init: (app) => {
-        const server = http.createServer(app);
+    init: async (server) => {
         const io = socketio(server);
 
         auth.init(io);
         pushUpdater.init(io);
 
-        io.on('connection', (socket) => {
+        io.on('connection', async (socket) => {
             console.log('a user connected');
 
             const sub = await pushUpdater.listen(socket);

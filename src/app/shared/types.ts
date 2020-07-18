@@ -2,7 +2,7 @@ export type ObjectId = string;
 
 export type DocumentRef<T> = T | ObjectId;
 
-export type MixedSchema = {[key: string]: any};
+export type MixedSchema = { [key: string]: any };
 
 export type ImageData = {
     data: ArrayBuffer,
@@ -12,7 +12,40 @@ export type ImageData = {
 export type DataPoint = {
     name: string,
     value: number
+};
+
+export type SelectOption = {
+    _id: ObjectId,
+    name: string
 }
+
+export enum ChatMessageType {
+    TEXT,
+    IMAGE,
+    TYPING
+}
+
+export enum ChatOrigin {
+    USER,
+    BOT,
+    REP
+}
+
+export type ChatMessage = {
+    origin: ChatOrigin,
+    type: ChatMessageType,
+    text?: string,
+    imageSrc?: string,
+    typing?: boolean
+};
+
+export type ChatResponse = {
+    response_type: string,
+    text: string,
+    time: number,
+    typing: boolean,
+    source: string
+};
 
 export type Address = {
     firstName: string,
@@ -45,7 +78,7 @@ export type Product = {
     price: number,
     description: string,
     discount: number,
-    quantity: number,
+    quantity?: number,
     specs: MixedSchema,
     showInStore: boolean
 };

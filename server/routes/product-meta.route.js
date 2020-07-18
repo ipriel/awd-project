@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { ProductMeta } = require('../models/product-meta.model');
-const { verifyToken, hasRole, hasRoles } = require('./middleware/auth.middleware');
+const { verifyToken, hasRole, hasRoles } = require('./plugins/auth.middleware');
 
 // Create
 router.post('/', verifyToken, hasRoles(['admin', 'logistics'], false), (req, res) => {
@@ -10,16 +10,6 @@ router.post('/', verifyToken, hasRoles(['admin', 'logistics'], false), (req, res
             return res.status(400).send(err);
         }
         res.status(201).send(doc);
-    });
-});
-
-// Read
-router.get('/:id', verifyToken, hasRole('admin'), (req, res) => {
-    ProductMeta.findById(req.params.id, (err, doc) => {
-        if(err) {
-            return res.status(400).send(err);
-        }
-        res.send(doc);
     });
 });
 
@@ -42,5 +32,26 @@ router.delete('/:id', verifyToken, hasRole('admin'), (req, res) => {
         res.send({deleted: doc._id});
     });
 });
+
+// Read
+router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
+    ProductMeta.find({}, '_id name', (err, products) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(products);
+    });
+});
+
+router.get('/:id', verifyToken, hasRole('admin'), (req, res) => {
+    ProductMeta.findById(req.params.id, (err, doc) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).send(err);
+        }
+        res.send(doc);
+    });
+});
+
 
 module.exports = router;
