@@ -18,7 +18,7 @@ module.exports = {
         });
 
         // Catch all other routes and return the index file
-        app.get('*', function (req, res) {
+        app.all('*', function (req, res) {
             res.sendFile(path.join(rootDir, 'www', 'index.html'));
         });
     }

@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { AngularMaterialModel } from "../angular-material.module";
+import { AngularMaterialModule } from "../angular-material.module";
 
 import { StoreRoutingModule } from "./store-routing.module";
 import { ProductComponent } from "./product/product.component";
@@ -24,7 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule, 
     StoreRoutingModule,
-    AngularMaterialModel,
+    AngularMaterialModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,

@@ -21,7 +21,7 @@ router.get('/analytics/income/daily', verifyToken, hasRole('admin'), (req, res) 
         if (err) {
             return res.status(400).send(err);
         }
-        res.send(docs);
+        res.send({data: docs});
     });
 });
 
@@ -54,7 +54,11 @@ router.get('/analytics/income/today', verifyToken, hasRole('admin'), (req, res) 
         if (err) {
             return res.status(400).send(err);
         }
-        res.send(doc.income);
+
+        if (doc && doc.length == 1)
+            res.send({data: doc[0].income});
+        else
+            res.send({data: 0});
     });
 });
 

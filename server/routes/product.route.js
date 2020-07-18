@@ -5,7 +5,7 @@ const { verifyToken, hasRole } = require('./plugins/auth.middleware');
 const { send } = require('process');
 
 // Update
-router.put('/pull-stock', verifyToken, hasRole('logistics'), (req, res) => {
+router.put('/pull-stock', verifyToken, hasRole('admin'), (req, res) => {
     Product.updateMany({
         _id: { $in: req.body.ids },
         quantity: {$gt: 0}
@@ -20,7 +20,7 @@ router.put('/pull-stock', verifyToken, hasRole('logistics'), (req, res) => {
     });
 });
 
-router.put('/:id/add-stock', verifyToken, hasRole('logistics'), (req, res) => {
+router.put('/:id/add-stock', verifyToken, hasRole('admin'), (req, res) => {
     Product.findByIdAndUpdate(req.params.id, { $inc: { quantity: req.body.count } }, (err, doc) => {
         if (err)
             return res.status(400).send(err);
@@ -64,7 +64,7 @@ router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
         if (err) {
             return res.status(400).send(err);
         }
-        res.send(count);
+        res.send({data: count});
     });
 });
 
