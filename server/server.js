@@ -9,14 +9,14 @@ const scraper = require('./scraper');
 
 const port = process.env.PORT || 3000;
 
+scraper.initScheduler();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 routes.register(app, __dirname);
+
 const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 ws.init(server);
-//ws.init(app);
-scraper.initScheduler();
 
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI, {

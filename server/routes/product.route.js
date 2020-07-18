@@ -4,63 +4,7 @@ const { Product } = require('../models/product.model');
 const { verifyToken, hasRole } = require('./plugins/auth.middleware');
 const { send } = require('process');
 
-// Create
-router.post('/', verifyToken, hasRole('admin'), (req, res) => {
-    Product.create(req.body, (err, doc) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.status(201).send(doc);
-    });
-});
-
-// Read
-router.get('/:id', (req, res) => {
-    Product.findById(req.params.id, (err, doc) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.send(doc);
-    });
-});
-
-router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
-    Product.countDocuments({showInStore: true}, (err, count) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.send(count);
-    });
-});
-
-router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
-    Product.find({}, '_id name', (err, products) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.send(products);
-    });
-});
-
 // Update
-router.put('/:id', verifyToken, hasRole('admin'), (req, res) => {
-    Product.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        res.send(doc);
-    });
-});
-
-router.put('/:id/add-stock', verifyToken, hasRole('logistics'), (req, res) => {
-    Product.findByIdAndUpdate(req.params.id, { $inc: { quantity: req.body.count } }, (err, doc) => {
-        if (err)
-            return res.status(400).send(err);
-
-        res.send({ _id: doc._id, quantity: doc.quantity });
-    });
-});
-
 router.put('/pull-stock', verifyToken, hasRole('logistics'), (req, res) => {
     Product.updateMany({
         _id: { $in: req.body.ids },
@@ -76,6 +20,24 @@ router.put('/pull-stock', verifyToken, hasRole('logistics'), (req, res) => {
     });
 });
 
+router.put('/:id/add-stock', verifyToken, hasRole('logistics'), (req, res) => {
+    Product.findByIdAndUpdate(req.params.id, { $inc: { quantity: req.body.count } }, (err, doc) => {
+        if (err)
+            return res.status(400).send(err);
+
+        res.send({ _id: doc._id, quantity: doc.quantity });
+    });
+});
+
+router.put('/:id', verifyToken, hasRole('admin'), (req, res) => {
+    Product.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(doc);
+    });
+});
+
 // Delete
 router.delete('/:id', verifyToken, hasRole('admin'), (req, res) => {
     Product.findOneAndDelete(req.params.id, (err, doc) => {
@@ -83,6 +45,45 @@ router.delete('/:id', verifyToken, hasRole('admin'), (req, res) => {
             return res.status(400).send(err);
 
         res.send({ deleted: doc._id });
+    });
+});
+
+// Create
+router.post('/', verifyToken, hasRole('admin'), (req, res) => {
+    Product.create(req.body, (err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.status(201).send(doc);
+    });
+});
+
+// Read
+router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
+    Product.countDocuments({showInStore: true}, (err, count) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(count);
+    });
+});
+
+router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
+    Product.find({}, '_id name', (err, products) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).send(err);
+        }
+        res.send(products);
+    });
+});
+
+router.get('/:id', (req, res) => {
+    Product.findById(req.params.id, (err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(doc);
     });
 });
 
