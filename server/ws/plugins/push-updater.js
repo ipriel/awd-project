@@ -1,4 +1,5 @@
 const { BehaviorSubject } = require('rxjs');
+const { filter } = require('rxjs/operators')
 
 let _io;
 const eventSource = new BehaviorSubject();
@@ -10,7 +11,9 @@ function init(io) {
 
 async function listen(socket) {
     return events$
-        .filter(data => data.uid == socket.username)
+        .pipe(
+            filter(data => data && data.uid == socket.username)
+        )
         .subscribe(data => {
             socket.emit(`update:${data.ns.coll}:${data.operationType}`, data);
         });
