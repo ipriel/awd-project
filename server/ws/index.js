@@ -7,7 +7,6 @@ const search = require('./plugins/search');
 
 module.exports = {
     init: async (server) => {
-        //const server = http.createServer(app);
         const io = socketio(server);
 
         auth.init(io);
