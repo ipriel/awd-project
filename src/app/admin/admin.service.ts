@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DataPoint } from '../shared/types';
-import { SelectOption } from '../shared/types';
-import { Product } from '../shared/types';
-import { ProductMeta } from '../shared/types';
+import { DataPoint, Product, ProductMeta, SelectOption } from '../shared/types';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +29,8 @@ getPeopleOnline(): Observable<{data: number}> {
 };
 
 // get recent daily income
-getDailyIncome(): Observable<{data: DataPoint[]}> {
-  return this.http.get<{data: DataPoint[]}>('/api/order/analytics/income/daily');
+getDailyIncome(): Observable<DataPoint[]> {
+  return this.http.get<DataPoint[]>('/api/order/analytics/income/daily');
 };
 
 // get shop products (id and name only)

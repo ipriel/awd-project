@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { DataPoint } from '../../shared/types';
 import { AdminService } from '../admin.service';
 
@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   productsSum$: Observable<number>;
   registeredUsers$: Observable<number>;
   peopleOnline$: Observable<number>;
-  dataSource$ : Observable<DataPoint[]>;
+  dataSource$: Observable<DataPoint[]>;
   barWidth = 600;
   barHeight = 400;
 
@@ -50,13 +50,9 @@ export class DashboardComponent implements OnInit {
 
     // get data for bar chart
     this.dataSource$ = this.adminService
-    .getDailyIncome()
-    .pipe(
-      tap((data) => console.log(data)),
-      map((res) => res.data)
-    );
+      .getDailyIncome();
   }
 
   constructor(private adminService: AdminService) { }
-  
+
 }
