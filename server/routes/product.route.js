@@ -64,7 +64,7 @@ router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
         if (err) {
             return res.status(400).send(err);
         }
-        res.send(count);
+        res.send({data: count});
     });
 });
 

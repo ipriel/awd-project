@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
 import { MatCarouselModule } from "@ngmodule/material-carousel";
 import { AboutComponent } from "./about/about.component";
-import { AngularMaterialModel } from './angular-material.module';
+import { AngularMaterialModule } from './angular-material.module';
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AuthModule } from "./auth/auth.module";
@@ -14,6 +14,7 @@ import { HeaderComponent } from "./header/header.component";
 import { HomeComponent } from "./home/home.component";
 import { SharedModule } from "./shared/shared.module";
 import { UserProfileComponent } from "./store/user-profile/user-profile.component";
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { UserProfileComponent } from "./store/user-profile/user-profile.componen
     BrowserAnimationsModule,
     MatCarouselModule.forRoot(),
     RouterModule,
-    AngularMaterialModel,
-    AngularFireAnalyticsModule
+    AngularMaterialModule,
+    AngularFireAnalyticsModule,
+    HttpClientModule
   ],
   providers: [
     ScreenTrackingService,

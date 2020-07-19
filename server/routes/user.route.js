@@ -23,7 +23,7 @@ router.get('/count/visitors', verifyToken, hasRole('admin'), (req, res) => {
         if (err) {
             return res.status(400).send(err);
         }
-        res.send(Math.round(Math.random() * count));
+        res.send({data: Math.round(Math.random() * count)});
     });
 });
 
@@ -43,7 +43,7 @@ router.get('/count/registered', verifyToken, hasRole('admin'), (req, res) => {
         if (err) {
             return res.status(400).send(err);
         }
-        res.send(count);
+        res.send({data: count});
     });
 });
 
