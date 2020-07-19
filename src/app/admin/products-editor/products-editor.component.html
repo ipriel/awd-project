@@ -1,0 +1,115 @@
+<mat-grid-list class="my-grid" cols="6" rowHeight="100px" padding="10px">
+  <mat-grid-tile class="my-tile" colspan="3">
+    <mat-form-field appearance="fill">
+      <mat-label>Select Product Type</mat-label>
+      <mat-select placeholder="Product Type" [formControl]="typeSelect">
+        <mat-option value="0">--None--</mat-option>
+        <mat-option value="1">Shop Products</mat-option>
+        <mat-option value="2">Meta Products</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile class="my-tile" [colspan]="3">
+    <mat-form-field appearance="fill">
+      <mat-label>Choose Product</mat-label>
+      <mat-select placeholder="Products" [disabled]="(products$ | async)?.length == 0" [formControl]="productSelect">
+        <mat-option *ngFor="let p of products$ | async" [value]="p._id">{{ p.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+<mat-card id="shopProduct" class="product">
+  <ng-container *ngIf="currentProduct$ | async as currentProduct">
+    <mat-card-content>
+      <h2>
+        <span *ngIf="showProduct">Shop Product</span>
+        <span *ngIf="showMeta">Meta Product</span>
+      </h2>
+      <form [formGroup]="productForm">
+        <h3 class="title">Name: </h3>
+        <mat-form-field>
+          <input matInput class="desc" type="text" formControlName="name" [disabled]="!updatingProduct">
+        </mat-form-field><br>
+        <h3 class="title">Type: </h3>
+        <mat-form-field><br>
+          <input matInput class="desc" type="text" formControlName="type" [disabled]="!updatingProduct">
+        </mat-form-field><br>
+        <h3 class="title">Company: </h3>
+        <mat-form-field><br>
+          <input matInput class="desc" type="text" formControlName="company" [disabled]="!updatingProduct">
+        </mat-form-field><br>
+        <h3 class="title">Price: </h3>
+        <mat-form-field><br>
+          <input matInput class="desc" type="number" formControlName="price" [disabled]="!updatingProduct">
+        </mat-form-field><br>
+        <h3 class="title">Discount (%): </h3>
+        <mat-form-field><br>
+          <input matInput class="desc" type="number" formControlName="discount" [disabled]="!updatingProduct">
+        </mat-form-field><br>
+        <h3 class="title">Description: </h3>
+        <mat-form-field><br>
+          <input matInput class="desc" type="text" formControlName="description" [disabled]="!updatingProduct">
+        </mat-form-field><br>
+        <!-- Specs: Begin -->
+        <div>
+          <h2>Specs</h2>
+          <div *ngFor="let param of currentProduct.specs | keyvalue">
+            <ng-container *ngIf="isString(param.value) || isNumber(param.value)">
+              <h3 class="title">{{ param.key }}</h3>
+              <mat-form-field>
+                <input class="desc" matInput [type]="isString(param.value) ? 'text' : 'number'" [formControlName]="param.key" [disabled]="!updatingProduct">
+              </mat-form-field><br>
+            </ng-container>
+            <ng-container *ngIf="isArray(param.value)" [formArrayName]="param.key">
+              <h3 class="title">{{ param.key }}</h3>
+              <mat-form-field *ngFor="let _ of getFormArray('specs.'+param.key)?.controls; index as i">
+                <input matInput class="desc" type="text" [formControlName]="i" [disabled]="!updatingProduct">
+              </mat-form-field><br>
+              <ng-container *ngFor="let _ of getFormArray('specs.'+param.key)?.controls; index as i">
+                <mat-form-field>
+                  <input matInput class="desc" type="text" [formControlName]="i" [disabled]="!updatingProduct">
+                </mat-form-field><br>
+                <br>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="isObject(param.value)" >
+              <h3 class="title">{{ param.key }}</h3>
+              <ng-container  *ngFor="let attr of param.value | keyvalue">
+                <ng-container *ngIf="isString(attr.value) || isNumber(attr.value)">
+                  <h3 class="title">{{ attr.key }}</h3>
+                  <mat-form-field>
+                    <input matInput class="desc" [type]="isString(param.value) ? 'text' : 'number'" [formControlName]="param.key" [disabled]="!updatingProduct">
+                  </mat-form-field><br>
+                </ng-container>
+                <ng-container *ngIf="isArray(attr.value)" [formArrayName]="attr.key">
+                  <h3 class="title">{{ attr.key }}</h3>
+                  <ng-container *ngFor="let _ of getFormArray('specs.'+param.key+'.'+attr.key)?.controls; index as i">
+                    <mat-form-field>
+                      <input matInput class="desc" type="text" [formControlName]="i" [disabled]="!updatingProduct">
+                    </mat-form-field><br>
+                    <br>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <!-- Specs: End -->
+        <h3 class="title">State: </h3>
+        <mat-checkbox formControlName="showInStore" [disabled]="!updatingProduct">Show in Store</mat-checkbox>
+      </form>
+    </mat-card-content>
+    <mat-card-actions *ngIf="showProduct">
+      <button mat-raised-button color="primary" *ngIf="updatingProduct" (click)="saveUpdate(productForm.value)">Save</button>
+      <button mat-raised-button color="primary" *ngIf="!updatingProduct" (click)="updateProduct()">Update</button>
+      <button mat-raised-button color="warn" *ngIf="updatingProduct" (click)="cancelUpdate()">Cancel</button>
+      <button mat-raised-button color="warn" *ngIf="!updatingProduct" (click)="delete(productForm.value)">Delete</button>
+    </mat-card-actions>
+    <mat-card-actions *ngIf="showMeta">
+      <button mat-raised-button color="primary" *ngIf="!creatingProduct" (click)="createNewProduct()">Create New Product</button>
+      <button mat-raised-button color="primary" *ngIf="creatingProduct" (click)="saveCreate(productForm.value)">Save</button>
+      <button mat-raised-button color="warn" *ngIf="creatingProduct" (click)="cancelCreate()">Cancel</button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>

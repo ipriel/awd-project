@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ReactiveFormsModule } from '@angular/forms';
-import {AngularMaterialModel} from '../angular-material.module';
+import {AngularMaterialModule} from '../angular-material.module';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { LoginComponent } from './login/login.component';
@@ -18,7 +18,7 @@ import { AuthService } from './auth.service';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     ReactiveFormsModule,
-    AngularMaterialModel,
+    AngularMaterialModule
   ],
   providers: [AuthService],
 })

@@ -6,7 +6,7 @@
             <mat-card-title>Today's Income</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1>{{ todaysIncome$ }}$</h1>
+            <h1>{{ todaysIncome$ | async }}$</h1>
         </mat-card-content>
     </mat-card>
     <!-- Products card -->
@@ -16,7 +16,7 @@
             <mat-card-title>Items In Store</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1>{{ productsSum$ }}</h1>
+            <h1>{{ productsSum$ | async }}</h1>
         </mat-card-content>
     </mat-card>
     <!-- Users card -->
@@ -26,7 +26,7 @@
             <mat-card-title>Registered Users</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1 class="card-content">{{ registeredUsers$ }}</h1>
+            <h1 class="card-content">{{ registeredUsers$ | async }}</h1>
         </mat-card-content>
     </mat-card>
     <!-- Online card -->
@@ -36,11 +36,11 @@
             <mat-card-title>People Online</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h1 class="card-content">{{ peopleOnline$ }}</h1>
+            <h1 class="card-content">{{ peopleOnline$ | async}}</h1>
         </mat-card-content>
     </mat-card>
 </div>
-<div id="bar" class="hero" appBar [dataSource]="dataSource$" [width]="barWidth" [height]="barHeight">
+<div id="bar" class="hero" appBar [dataSource]="dataSource$ | async" [width]="barWidth" [height]="barHeight">
     <h1>Recent Daily Income</h1>
     <svg></svg>
 </div>

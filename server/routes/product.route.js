@@ -65,13 +65,14 @@ router.post('/', verifyToken, hasRole('admin'), (req, res) => {
 });
 
 // Read
-router.get("/count", verifyToken, hasRole("admin"), (req, res) => {
-  Product.countDocuments({ showInStore: true }, (err, count) => {
-    if (err) {
-      return res.status(400).send(err);
-    }
-    res.send(count);
-  });
+router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
+    Product.countDocuments({showInStore: true}, (err, count) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send({data: count});
+    });
+
 });
 
 router.get("/select", verifyToken, hasRole("admin"), (req, res) => {

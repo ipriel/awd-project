@@ -1,22 +1,32 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-// import { AdminComponent } from './admin.component';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
-import { MatCardModule } from '@angular/material/card';
+// import { AdminComponent } from './admin.component';
+import { ReactiveFormsModule } from '@angular/forms';
+//import { BrowserModule } from '@angular/platform-browser';
+import { AngularMaterialModule } from '../angular-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { BarDirective } from './bar.directive';
 import { DashboardComponent } from './dashboard/dashboard.component';
-// import { AdminComponent } from './admin.component';
+import { ProductsEditorComponent } from './products-editor/products-editor.component';
 
 
 @NgModule({
   // declarations: [AdminComponent],
   imports: [
     CommonModule,
+  //  BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
     AdminRoutingModule,
-    MatCardModule,
+    AngularMaterialModule,
     AngularFireAnalyticsModule
   ],
-  declarations: [DashboardComponent, BarDirective]
+  declarations: [
+    DashboardComponent,
+    ProductsEditorComponent,
+    BarDirective
+  ]
 })
 export class AdminModule { }
