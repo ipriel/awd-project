@@ -1,24 +1,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const user = require('./user')
-const product = require('./product');
+const { addressSchema } = require('./user.model');
 
 // Create Schema and Model
 const statusSchema = new Schema({
     update_time: Date,
-    status: Number
+    update_by: { type: Schema.Types.ObjectId, ref: 'User' },
+    status: Number, // 0 - New/Received, 1 - Ready, 2 - Transit, 3 - Delivered
 });
 
 const OrdersSchema = new Schema({
-    orderId: Number,
-    userId: Number,
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     date: Date,
-    shippingAddress: user.addressSchema,
-    billingAddress: user.addressSchema,
+    shippingAddress: addressSchema,
+    billingAddress: addressSchema,
     status: [statusSchema],
     totalPrice: Number,
-    items: [product.Product],
-    shippingType: Number
+    items: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+    shippingType: Number,
+    delivery_confirmation: {
+        name: String,
+        signature: { data: Buffer, contentType: String }
+    }
 });
 
 const Order = mongoose.model('order', OrdersSchema);

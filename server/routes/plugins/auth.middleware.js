@@ -1,31 +1,21 @@
-const admin = require("firebase-admin");
-
-const cert_url = "https://www.googleapis.com/robot/v1/metadata/x509/" +
-    process.env.FIREBASE_EMAIL.replace('@', '%40');
-const serviceAccount = {
-    "type": "service_account",
-    "project_id": "awd-project-f7bf9",
-    "private_key_id": process.env.FIREBASE_PKID,
-    "private_key": process.env.FIREBASE_PK,
-    "client_email": process.env.FIREBASE_EMAIL,
-    "client_id": process.env.FIREBASE_CID,
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": cert_url
-};
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://awd-project-f7bf9.firebaseio.com"
-});
+const auth = require("../../firebase-init");
 
 function verifyToken(req, res, next) {
-    admin.auth().verifyIdToken(idToken)
+    const authHeader = req.headers.authorization;
+
+    if (typeof authHeader == 'undefined' || authHeader == null) {
+        console.error('Error: No Auth Header')
+        return res.sendStatus(401);
+    }
+    
+    const idToken = authHeader.split(' ')[1];
+
+    auth.verifyIdToken(idToken)
         .then(function (decodedToken) {
             req.uid = decodedToken.uid;
             next();
         }).catch(function (err) {
+            console.log(err);
             res.status(401).send(err);
         });
 }
@@ -34,6 +24,9 @@ function getClaims(uid) {
     return admin.auth().getUser(uid)
         .then((user) => {
             return user.customClaims;
+        }).catch(function (err) {
+            console.log(err);
+            res.status(401).send(err);
         });
 }
 

@@ -1,0 +1,47 @@
+.my-grid {
+    width: 50%;
+    margin: auto;
+}
+
+.product-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+.title {
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.product {
+    width: 50%;
+    margin: auto;
+}
+
+.desc {
+    display: inline-block !important;
+}
+
+.inner {
+    display: inline-block !important;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-right: 10px;
+}
+
+.outer {
+    text-align: center;
+}
+
+.checkbox {
+    display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+  display: inline-block;
+}
+
+:host {
+    background: whitesmoke;
+}

@@ -7,7 +7,10 @@ import { ImageData } from './types';
 export class BtoImgPipe implements PipeTransform {
 
   transform(value:  ImageData): string {
-    const imgData = btoa(String.fromCharCode.apply(null, value.data));
+    if (value == null || typeof value == 'undefined')
+      return null;
+
+    const imgData = btoa(String.fromCharCode.apply(null, value.data.data));
     return `data:${value.contentType};base64,${imgData}`;
   }
 

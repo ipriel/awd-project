@@ -9,7 +9,7 @@ const ProductMetaSchema = new Schema({
     company: String,
     image: { data: Buffer, contentType: String },
     importerPrice: Number,
-    specs: [Schema.Types.Mixed]
+    specs: Schema.Types.Mixed
 });
 
 ProductMetaSchema.plugin(mongoose_fuzzy_searching, { fields: ['name', 'company'] });

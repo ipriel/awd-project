@@ -2,6 +2,7 @@ const got = require('got');
 const cheerio = require('cheerio');
 const Nightmare = require('nightmare');
 const FileType = require('file-type');
+const { ProductMeta } = require('../models/product-meta.model')
 
 /**
  * Loads html document at url and returns $() function
@@ -126,6 +127,15 @@ function parsePrice(priceStr, xeRate) {
     return parseFloat(price.toFixed(2));
 }
 
+function save(data) {
+    ProductMeta.updateOne({name: data.name, company: data.company}, data, {upsert: true, omitUndefined: true}, (err, doc) => {
+        if(err)
+            console.error(err);
+
+        //console.log(data.name + ' saved: '+doc._id);
+    });
+}
+
 module.exports = {
     scrape,
     render,
@@ -134,5 +144,6 @@ module.exports = {
     sanitizeFileName,
     arrayFilterUnique,
     parseImage,
-    parsePrice
+    parsePrice,
+    save
 };
