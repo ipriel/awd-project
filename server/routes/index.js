@@ -11,7 +11,6 @@ module.exports = {
         app.use('/api/product', product);
         app.use('/api/user', user);
 
-        console.log(path.join(rootDir, 'www', 'index.html'));
         // Catch all requests for assets (js, css, etc.)
         app.get('*.*$', function (req, res) {
             res.sendFile(path.join(rootDir, 'www', req.path));

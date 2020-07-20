@@ -1,11 +1,15 @@
+import { ImageData } from 'src/app/shared/types';
+
 export interface Product {
-  productId: number;
-  productName: string;
-  productPrice: number;
-  productDescription: string;
-  productDiscount: number;
-  productQuantity: number;
-  productCategory: string;
-  productSeller: string;
-  productImage:string;
+    productID: string,
+    name: string,
+    type: string,
+    company: string,
+    image: ImageData,
+    price: number,
+    description: string,
+    discount: number,
+    quantity: number,
+    specs: string,
+    showInStore: boolean
 }
