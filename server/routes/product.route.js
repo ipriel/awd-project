@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Product, search } = require("../models/product.model");
+const { Product } = require("../models/product.model");
 const { verifyToken, hasRole } = require("./plugins/auth.middleware");
 const { send } = require("process");
 
@@ -14,12 +14,12 @@ router.put("/pull-stock", verifyToken, hasRole("logistics"), (req, res) => {
     { $inc: { quantity: -1 } },
     { multi: true },
     (err, status) => {
-      if (err) return req.status(400).send(err);
+      if (err) return res.status(400).send(err);
 
       if (status.matchedCount < req.body.ids) {
-        req.status(409).send("Some products were unavailable");
+        res.status(409).send("Some products were unavailable");
       }
-      req.send("Success");
+      res.send("Success");
     }
   );
 });
@@ -47,7 +47,7 @@ router.put("/:id", verifyToken, hasRole("admin"), (req, res) => {
 
 // Delete
 router.delete("/:id", verifyToken, hasRole("admin"), (req, res) => {
-  Product.findOneAndDelete(req.params.id, (err, doc) => {
+  Product.findOneAndDelete({ _id: req.params.id }, (err, doc) => {
     if (err) return res.status(400).send(err);
 
     res.send({ deleted: doc._id });
@@ -85,24 +85,26 @@ router.get("/select", verifyToken, hasRole("admin"), (req, res) => {
   });
 });
 
-router.get("/searchProducts", async (req, res) => {
-    try {
-        const result = await search();
-        res.send(result);   
-      }  catch (err) {
-        console.error(err);
-        return res.status(400).send(err);
-      }
+router.get("/", async (req, res) => {
+  Product.find({}, (err, products) => {
+    if (err) {
+      console.error(err);
+      return res.status(400).send(err);
+    }
+    
+    res.send(products);
+  });
 });
 
-router.post("/searchProducts", async (req, res) => {
-  try {
-    const result = await search(req.body.ids);
-    res.send(result);   
-  }  catch (err) {
-    console.error(err);
-    return res.status(400).send(err);
-  }
+router.post("/search", async (req, res) => {
+  Product.find({_id: { $in: req.body.ids }}, (err, products) => {
+    if (err) {
+      console.error(err);
+      return res.status(400).send(err);
+    }
+    
+    res.send(products);
+  });
 });
 
 router.get("/:id", (req, res) => {

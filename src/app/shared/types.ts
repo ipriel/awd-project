@@ -6,6 +6,7 @@ export type MixedSchema = { [key: string]: any };
 
 export type ImageData = {
     data: {
+        type: string,
         data: ArrayBuffer
     },
     contentType: string

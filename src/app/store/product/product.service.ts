@@ -1,7 +1,7 @@
-import { Product } from "./product.model";
-import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { Product } from "./product.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ export class ProductService {
   }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>("/api/product/searchProducts");
+    return this.http.get<Product[]>("/api/product/");
   }
 
   getProductById(id: string): Observable<Product> {
@@ -25,7 +25,7 @@ export class ProductService {
   getShoppingCart(): Observable<Product[]> {
     const ids = [...this.shoppingCart];
 
-    return this.http.post<Product[]>("/api/product/searchProducts", {
+    return this.http.post<Product[]>("/api/product/search", {
       ids,
     });
   }
