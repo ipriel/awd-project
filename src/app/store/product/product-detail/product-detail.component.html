@@ -1,64 +1,61 @@
-<div class="container">
-  <mat-card class="magic">
-    <img
-      mat-card-image
-      src="https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg"
-      alt="{{ product.productName }}"
-    />
-  </mat-card>
-  
-  <mat-card class="spacer">
-    <mat-card-title>Product Price</mat-card-title>
-    <mat-card-content>something</mat-card-content>
-  </mat-card>
-  <mat-card class="space">
-    <mat-card-title>Product Seller</mat-card-title>
-    <mat-card-content>something</mat-card-content>
-  </mat-card>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="addToCart(product)"
-    class="cart"
-  >
-    Add to Cart
-  </button>
-</div>
+<div class="group" *ngIf="product$ | async as product">
+  <div class="container">
+    <mat-card class="magic">
+      <img mat-card-image [src]="product.image | btoimg" alt="{{ product.name }}" />
+    </mat-card>
 
-<div class="prodDetail">
-  <mat-card class="pro">
-    <mat-card-header>
-      <h2 class="head">Product Detailes</h2>
-    </mat-card-header>
-    <mat-card-content class="see">
-      <tbody>
+    <mat-card class="spacer">
+      <mat-card-title>Product Price</mat-card-title>
+      <mat-card-content>{{ product.price }}</mat-card-content>
+    </mat-card>
+    <mat-card class="space">
+      <mat-card-title>Product Seller</mat-card-title>
+      <mat-card-content>{{ product.company }}</mat-card-content>
+    </mat-card>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addToCart(product)"
+      class="cart"
+    >
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="prodDetail">
+    <mat-card class="pro">
+      <mat-card-header>
+        <h2 class="head">Product Detailes</h2>
+      </mat-card-header>
+      <mat-card-content class="see">
+        <tbody>
           <mat-divider></mat-divider>
-        <tr>
-          <th>Product Name</th>
-          <td>{{ product.productName }}</td>
-        </tr>
-        <mat-divider></mat-divider>
-        <tr>
-          <th>Product Description</th>
-          <td>{{ product.productDescription }}</td>
-        </tr>
-        <mat-divider></mat-divider>
-        <tr>
-          <th>Product Category</th>
-          <td>{{ product.productCategory }}</td>
-        </tr>
-        <mat-divider></mat-divider>
-        <tr>
-          <th>No. of quantity available</th>
-          <td>{{ product.productQuantity }}</td>
-        </tr>
-        <mat-divider></mat-divider>
-        <tr>
-          <th>Product Added on</th>
-          <td></td>
-        </tr>
-      </tbody>
-    </mat-card-content>
-  </mat-card>
+          <tr>
+            <th>Product Name</th>
+            <td>{{ product.name }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th>Product Description</th>
+            <td>{{ product.description }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th>Product Category</th>
+            <td>{{ product.type }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th>No. of quantity available</th>
+            <td>{{ product.quantity }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th>Specs</th>
+            <td>{{ stringifySpecs(product) }}</td>
+          </tr>
+        </tbody>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
-

@@ -11,15 +11,12 @@
   <div>
     <button
       class="products"
+      routerLink="/store/products"
       mat-flat-button
       color="accent"
-      [matMenuTriggerFor]="prodList">
-      <a>Products<mat-icon class="expand">expand_more</mat-icon></a>
+    >
+      <a>Products</a>
     </button>
-    <mat-menu #prodList="matMenu">
-     <a [routerLink]="['store/products/product-details']"> <button mat-menu-item>something1</button></a>
-      <button mat-menu-item>something2</button>
-    </mat-menu>
   </div>
 
   <a routerLink="/about" class="about"
@@ -51,15 +48,20 @@
 
   <div class="logIn" *ngIf="!isLogedIn; else logOut">
     <a routerLink="/log-in" (click)="onLogIn()"
-      ><button mat-raised-button color="primary">Log in</button></a>
-
+      ><button mat-raised-button color="primary">Log in</button></a
+    >
   </div>
   <ng-template #logOut
     ><a routerLink="/" class="logOut" (click)="onLogOut()"
-      ><button mat-raised-button color="warn">Log out</button></a >
-    </ng-template>
+      ><button mat-raised-button color="warn">Log out</button></a
+    >
+  </ng-template>
 
-    <a [routerLink]="['store/products/shopping-cart']" *ngIf="isLogedIn"><button mat-icon-button class="shopCart"><mat-icon matBadge={{numOfProd()}} matBadgeColor="accent">shopping_cart</mat-icon></button></a>
-
-
+  <a [routerLink]="['store/products/shopping-cart']" *ngIf="isLogedIn"
+    ><button mat-icon-button class="shopCart">
+      <mat-icon matBadge="{{ numOfProd() }}" matBadgeColor="accent"
+        >shopping_cart</mat-icon
+      >
+    </button></a
+  >
 </mat-toolbar>

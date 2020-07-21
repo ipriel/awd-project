@@ -31,5 +31,3 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
   console.log('Connection to MongoDB successful')
 });
-
-//app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
