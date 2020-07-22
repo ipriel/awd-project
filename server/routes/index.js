@@ -3,6 +3,7 @@ const order = require('./order.route');
 const productMeta = require('./product-meta.route');
 const product = require('./product.route');
 const user = require('./user.route');
+const shop = require('./shop.route');
 
 module.exports = {
     register: function (app, rootDir) {
@@ -10,6 +11,7 @@ module.exports = {
         app.use('/api/product-meta', productMeta);
         app.use('/api/product', product);
         app.use('/api/user', user);
+        app.use('/api/shop', shop);
 
         // Catch all requests for assets (js, css, etc.)
         app.get('*.*$', function (req, res) {

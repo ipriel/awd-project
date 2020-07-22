@@ -43,6 +43,17 @@ router.get('/select', verifyToken, hasRole('admin'), (req, res) => {
     });
 });
 
+router.get("/categories", async (req, res) => {
+    try {
+      const categories = await ProductMeta.distinct("type", {});
+      res.status(200).json({
+        categories,
+      });
+    } catch (err) {
+      res.status(500).send("Internal server error");
+    }
+});
+
 router.get('/:id', verifyToken, hasRole('admin'), (req, res) => {
     ProductMeta.findById(req.params.id, (err, doc) => {
         if (err) {
