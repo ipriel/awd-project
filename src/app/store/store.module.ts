@@ -10,6 +10,7 @@ import { CartProductsComponent } from "./product/shopping-cart/cart-products/car
 import { CartCalcComponent } from "./product/shopping-cart/cart-calc/cart-calc.component";
 import { CheckoutComponent } from "./product/shopping-cart/checkout/checkout.component";
 import { ShippingDetailsComponent } from './product/shopping-cart/checkout/shipping-details/shipping-details.component';
+import {SharedModule} from '../shared/shared.module'
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -30,7 +31,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    SharedModule,
+  ],
   declarations: [
     ProductComponent,
     ProductListComponent,

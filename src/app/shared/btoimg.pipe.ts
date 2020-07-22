@@ -10,7 +10,7 @@ export class BtoImgPipe implements PipeTransform {
     if (value == null || typeof value == 'undefined')
       return null;
 
-    const imgData = btoa(String.fromCharCode.apply(null, value.data));
+    const imgData = btoa(String.fromCharCode.apply(null, value.data.data));
     return `data:${value.contentType};base64,${imgData}`;
   }
 

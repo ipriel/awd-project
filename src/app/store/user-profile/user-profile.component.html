@@ -1,1 +1,38 @@
-<p>user-profile works!</p>
+<div class="main-div">
+  <mat-card class="example-card">
+    <mat-card-header class="head">
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{
+        user.firstName + " " + user.lastName
+      }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <h1>Personal details:</h1>
+        <section>
+          <h3>Address:</h3>
+          <span>{{ formatAddress(user.address) }}</span>
+        </section>
+        <section>
+          <h3>Email:</h3>
+          <span>{{ user.email }}</span>
+        </section>
+      </div>
+      <div>
+        <h1>Past orders:</h1>
+        <div class="orders">
+          <div class="order" *ngFor="let order of user.orders">
+            <div>{{ order.date | date: "short" }}</div>
+            <span>{{ order.items.length }} items</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]="['/store/products/shopping-cart']">
+        Shopping Cart
+      </button>
+      <button mat-button>Edit User Information</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

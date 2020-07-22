@@ -1,0 +1,45 @@
+.main-div {
+  padding: 20px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  height: calc(100% - 100px);
+  overflow: auto;
+}
+
+.head {
+  align-content: center;
+  justify-content: center;
+}
+
+.example-card {
+  max-width: 800px;
+  display: block;
+  align-self: center;
+}
+
+.example-header-image {
+  background-image: url("https://freesvg.org/img/abstract-user-flat-4.png");
+  background-size: cover;
+}
+h1 {
+  margin-top: 10px;
+}
+
+section {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.orders {
+  display: grid;
+}
+
+.order {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px;
+  padding: 5px 15px;
+  background-color: #eaeaea;
+}

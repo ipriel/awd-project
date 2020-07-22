@@ -1,78 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { Product } from '../../product.model';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Product } from "../../product.model";
+import { ProductService } from "../../product.service";
+import { Observable, Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-cart-products',
-  templateUrl: './cart-products.component.html',
-  styleUrls: ['./cart-products.component.css']
+  selector: "app-cart-products",
+  templateUrl: "./cart-products.component.html",
+  styleUrls: ["./cart-products.component.css"],
 })
-export class CartProductsComponent implements OnInit {
+export class CartProductsComponent implements OnInit, OnDestroy {
+  shoppingCart$: Subscription;
+  shoppingCart: Product[];
 
-  cartProducts:Product[]=[{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'},{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'},{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'},{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some long ass description  best and things as such',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'},{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some long ass description  best and things as such',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'},{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some long ass description  best and things as such',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'},{productId: 88,
-    productName: 'samsung some',
-    productPrice: 88,
-    productDescription: 'some long ass description  best and things as such',
-    productDiscount: 88,
-    productQuantity: 88,
-    productCategory: 'phone',
-    productSeller: 'sam',
-    productImage:'https://d3m9l0v76dty0.cloudfront.net/system/photos/3712313/large/24b5d2d1e40056808b90b20416697270.jpg'}]
-
-  constructor() { }
+  constructor(public productService: ProductService) {}
+  ngOnDestroy(): void {
+    this.shoppingCart$.unsubscribe();
+  }
 
   ngOnInit(): void {
+    this.shoppingCart$ = this.productService
+      .getShoppingCart()
+      .subscribe((products) => {
+        this.shoppingCart = products;
+      });
   }
 
-  removeCartProd(product){
-    console.log("remove prod");
-  }
+  removeCartProd(product: Product) {
+    this.productService.removeProductFromShoppingCart(product._id);
 
+    this.shoppingCart = this.shoppingCart.filter(
+      ({ _id }) => _id !== product._id
+    );
+  }
 }

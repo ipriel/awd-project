@@ -1,24 +1,17 @@
-.footer
-{   
-    width: 100%;
-    bottom: 0; 
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-    
+.footer {
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
 }
 
-.bar
-{
-    display: flex;
-    justify-content: center;
-    
-    
+.bar {
+  display: flex;
+  justify-content: center;
 }
 
-.bar img{
-    display: block;
-    padding: 0;
-    
+.bar img {
+  display: block;
+  padding: 0;
+  max-height: 100px;
 }
-

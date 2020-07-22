@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { ReactiveFormsModule } from '@angular/forms';
-//import { BrowserModule } from '@angular/platform-browser';
+// import { AdminComponent } from './admin.component';
 import { AngularMaterialModule } from '../angular-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { BarDirective } from './bar.directive';

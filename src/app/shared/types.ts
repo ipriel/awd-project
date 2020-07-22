@@ -11,7 +11,10 @@ export type Roles = {
 };
 
 export type ImageData = {
-    data: ArrayBuffer,
+    data: {
+        type: string,
+        data: ArrayBuffer
+    },
     contentType: string
 };
 
