@@ -4,6 +4,12 @@ export type DocumentRef<T> = T | ObjectId;
 
 export type MixedSchema = { [key: string]: any };
 
+export type Roles = {
+    admin: boolean,
+    logisticsDelivery: boolean,
+    logisticsWarehouse: boolean
+};
+
 export type ImageData = {
     data: ArrayBuffer,
     contentType: string

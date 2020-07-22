@@ -1,3 +1,4 @@
+<br>
 <div class="card-grid">
     <!-- Income card -->
     <mat-card class="grid-card income-card">
@@ -40,7 +41,13 @@
         </mat-card-content>
     </mat-card>
 </div>
-<div id="bar" class="hero" appBar [dataSource]="dataSource$ | async" [width]="barWidth" [height]="barHeight">
+<br>
+<br>
+<div>
+    
+<div class="bar-div">
+<mat-card id="bar" class="bar-chart" appBar [dataSource]="dataSource$ | async" [width]="barWidth" [height]="barHeight">
     <h1>Recent Daily Income</h1>
     <svg></svg>
+</mat-card>
 </div>

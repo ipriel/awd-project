@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DataPoint, Product, ProductMeta, SelectOption } from '../shared/types';
+import { DataPoint, Product, ProductMeta, SelectOption, Roles } from '../shared/types';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +66,14 @@ updateProduct(product: Product) {
 // save new product
 saveNewProduct(product: Product) {
   return this.http.post(`/api/product`, product);
+};
+
+getUserRoles(userId) : Observable<Roles> {
+  return this.http.get<Roles>(`/api/user/by-uid/${userId}/auth/roles`);
+};
+
+updateUserRoles(userId, userRoles) {
+  return this.http.put(`/api/user/by-uid/${userId}/auth/roles`, userRoles);
 };
 
 constructor(private http: HttpClient) { }
