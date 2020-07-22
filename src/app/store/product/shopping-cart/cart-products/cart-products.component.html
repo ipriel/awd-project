@@ -1,14 +1,11 @@
 <mat-grid-list cols="8" rowHeight="100%">
   <mat-grid-tile [colspan]="4" class="tile-card-container">
     <div class="card-container">
-      <mat-card
-        *ngFor="let product of shoppingCart$ | async"
-        class="example"
-      >
+      <mat-card *ngFor="let product of shoppingCart" class="example">
         <!--might change here the route-->
         <a [routerLink]="['/products/product', product.productID]">
           <img
-            [src]="product.image|btoimg"
+            [src]="product.image | btoimg"
             alt=""
             width="360px"
             height="640px"
@@ -29,12 +26,7 @@
           <mat-divider></mat-divider>
           <span class="item-price"
             ><p style="text-align: center;">$ {{ product.price }}</p>
-            <button
-              mat-icon-button
-              (click)="
-                productService.removeProductFromShoppingCart(product.productID)
-              "
-            >
+            <button mat-icon-button (click)="removeCartProd(product)">
               <mat-icon>cancel</mat-icon>
             </button>
           </span>
@@ -44,6 +36,6 @@
   </mat-grid-tile>
 
   <mat-grid-tile [colspan]="4">
-    <app-cart-calc [products]="shoppingCart$ | async"></app-cart-calc>
+    <app-cart-calc [products]="shoppingCart"></app-cart-calc>
   </mat-grid-tile>
 </mat-grid-list>

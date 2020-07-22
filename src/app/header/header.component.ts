@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { RouterLink } from "@angular/router";
 import { ProductService } from "../store/product/product.service";
+import { User } from "../shared/types";
 
 @Component({
   selector: "app-header",
@@ -10,6 +11,9 @@ import { ProductService } from "../store/product/product.service";
 })
 export class HeaderComponent implements OnInit {
   isLogedIn: boolean = false;
+
+  // TODO: get from auth service instead?
+  @Input() user: User;
 
   onLogIn() {
     this.isLogedIn = true;
@@ -26,5 +30,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(public productService: ProductService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = {
+      firstName: "Johnatan",
+      lastName: "Hallel",
+    } as any;
+  }
 }

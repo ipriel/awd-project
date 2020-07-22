@@ -1,15 +1,15 @@
 <div class="products-container">
   <mat-card *ngFor="let product of products$ | async" class="product">
     <!--might change here the route-->
-    <a [routerLink]="['product-details', product.productID]">
-      <img [src]="product.image|btoimg" alt="" />
+    <a [routerLink]="['product-details', product._id]">
+      <img [src]="product.image | btoimg" alt="" />
     </a>
     <mat-card-content>
       <mat-card-subtitle style="text-align: center;"
         ><h3>{{ product.type }}</h3></mat-card-subtitle
       >
       <a
-        [routerLink]="['product-details', product.productID]"
+        [routerLink]="['product-details', product._id]"
         style="text-decoration: none;"
         ><h4 style="text-align: center;">
           <strong>{{ product.name }}</strong>
