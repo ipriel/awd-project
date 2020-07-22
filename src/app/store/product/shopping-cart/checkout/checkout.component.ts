@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ProductService } from "../../product.service";
+import { Product } from '../../product.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -9,9 +12,13 @@ import { FormGroup } from '@angular/forms';
 export class CheckoutComponent implements OnInit {
   isLinear = true;
   firstFormGroup:FormGroup;
-  constructor() { }
+  products$: Observable<Product[]>;
+  
+  constructor(public productService: ProductService) { }
 
   ngOnInit(): void {
+    this.products$ = this.productService
+      .getProducts()
   }
 
 }

@@ -1,14 +1,19 @@
 <mat-horizontal-stepper [linear]="isLinear" #stepper>
   <mat-step>
     <ng-template matStepLabel>Products review</ng-template>
-    <mat-card>
+    <mat-card *ngFor="let product of products$ | async" class="product">
+        <mat-card-content>
+          <div mat-card-avatar class="prod_img">
+            <img [src]="product.image|btoimg" alt="" />
+          </div>
+          <mat-card-title>{{product.name}}</mat-card-title>
+          <mat-card-subtitle>{{product.price}}</mat-card-subtitle>
+        <mat-divider></mat-divider>
+      </mat-card-content>
         
     </mat-card>
   </mat-step>
   <mat-step [stepControl]="firstFormGroup" label="shipping-detailes">
     <app-shipping-details></app-shipping-details>
-  </mat-step>
-  <mat-step label='Payment'> 
-
   </mat-step>
 </mat-horizontal-stepper>

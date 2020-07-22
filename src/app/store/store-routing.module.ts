@@ -4,6 +4,7 @@ import { CartProductsComponent } from "./product/shopping-cart/cart-products/car
 import { ProductDetailComponent } from "./product/product-detail/product-detail.component";
 import { CheckoutComponent } from "./product/shopping-cart/checkout/checkout.component";
 import { ProductListComponent } from "./product/product-list/product-list.component";
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [
   /* { path: '', component: StoreComponent } */
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path: "shopping-cart", component: CartProductsComponent },
       { path: "product-details/:id", component: ProductDetailComponent },
     ],
+    }, { path: "user" ,component: UserProfileComponent,
   },
 ];
 
