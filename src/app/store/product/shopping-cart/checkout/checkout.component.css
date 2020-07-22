@@ -1,0 +1,14 @@
+.products {
+  display: flex;
+}
+
+.product {
+  margin-right: 35px;
+}
+
+.prod_img {
+  height: 85px;
+  width: 85px;
+  margin-left: 30%;
+  margin-right: 30%;
+}

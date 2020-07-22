@@ -31,7 +31,7 @@ export class ProductService {
   }
 
   addItemToShoppingCart(product: Product) {
-    this.shoppingCart.add(product.productID);
+    this.shoppingCart.add(product._id);
 
     localStorage.setItem(
       "shoppingCart",
@@ -39,7 +39,7 @@ export class ProductService {
     );
   }
 
-  removeProductFromShoppingCart(id: string) {
+  public removeProductFromShoppingCart(id: string) {
     this.shoppingCart.delete(id);
     localStorage.setItem(
       "shoppingCart",
