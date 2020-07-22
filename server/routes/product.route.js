@@ -96,6 +96,24 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.get("/byCategory/:category", async (req, res) => {
+  const query = {};
+
+  if (req.params.category) {
+    query.type = req.params.category;
+  }
+
+  Product.find(query, (err, products) => {
+    if (err) {
+      console.error(err);
+      return res.status(400).send(err);
+    }
+
+    res.send(products);
+  });
+});
+
+
 router.post("/search", async (req, res) => {
   Product.find({_id: { $in: req.body.ids }}, (err, products) => {
     if (err) {
