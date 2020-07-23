@@ -3,7 +3,7 @@
     <div class="card-container">
       <mat-card *ngFor="let product of shoppingCart" class="example">
         <!--might change here the route-->
-        <a [routerLink]="['/products/product', product.productID]">
+        <a [routerLink]="['/store/products/product-details', product._id]">
           <img
             [src]="product.image | btoimg"
             alt=""
@@ -16,7 +16,7 @@
             ><h3>{{ product.type }}</h3></mat-card-subtitle
           >
           <a
-            [routerLink]="['/products/product', product.productID]"
+            [routerLink]="['/store/products/product-details', product._id]"
             style="text-decoration: none;"
             ><h4 style="text-align: center;">
               <strong>{{ product.name }}</strong>

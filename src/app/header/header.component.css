@@ -1,59 +1,36 @@
-.ourLogo
-{
-    margin-top: 0.5rem;
+.logo {
+  height: 50px;
+  margin-top: -5px;
 }
 
-.products
-{
-    margin: 1rem;
+.header {
+  display: grid;
+  grid-template-columns: min-content 1fr 1.5fr 1fr;
+  column-gap: 4px;
+  align-items: center;
 }
 
-.expand
-{
-    position: relative;
-    top: 0.5rem;
+.left-menu {
+  display: flex;
+  justify-content: flex-start;
 }
 
-form 
-{
-    position: absolute;
-    right: 40%;
-
+.left-menu > * {
+  margin-left: 10px;
 }
 
-
-
-.logIn
-{
-    
-    position: absolute;
-    left: 94%;
+.right-menu {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.register
-{
-    position: absolute;
-    left: 88%;
+.right-menu > a, .right-menu > div > a {
+  margin-right: 10px;
 }
 
-.user
-{
-    position: absolute;
-    left: 87%;
-   
+.shopCart {
+  position: absolute;
+  left: 84%;
+  top: 1rem;
+  color: black;
 }
-
-.logOut
-{
-    position: absolute;
-    left: 94%;
-}
-
-.shopCart
-{
-    position: absolute;
-    left: 84%;
-    top: 1rem;
-    color: black;
-}
-

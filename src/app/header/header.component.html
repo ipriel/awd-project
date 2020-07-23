@@ -1,67 +1,46 @@
-<mat-toolbar color="primary">
-  <span class="ourLogo">
-    <a routerLink="/"
-      ><img
-        src="https://i.ibb.co/LZW2wZ0/bf10fb34-29c3-44d2-94ba-cc5a12f3f22c-200x200.png"
-        alt="logo"
-        border="0"
-    /></a>
+<mat-toolbar class="header" color="primary">
+  <span class="logo">
+    <a routerLink="/">
+      <img src="/assets/images/logo.png" alt="logo" />
+    </a>
   </span>
 
-  <div>
-    <button
-      class="products"
-      routerLink="/store/products"
-      mat-flat-button
-      color="accent"
-    >
+  <div class="left-menu">
+    <button class="products" routerLink="/store/products" mat-raised-button color="accent">
       <a>Products</a>
     </button>
+
+    <a routerLink="/about" class="about">
+      <button mat-raised-button color="accent">About Us</button>
+    </a>
   </div>
 
-  <a routerLink="/about" class="about"
-    ><button mat-flat-button color="accent">About Us</button></a
-  >
+  <app-search-bar type="product" has-button="true" mode="light" (select)="onSelect($event)" (search)="onSearch($event)"></app-search-bar>
 
-  <form class="search-form">
-    <mat-form-field>
-      <mat-label>Search</mat-label>
-      <input matInput type="text" />
-      <button mat-icon-button class="search-icon">
-        <mat-icon>search</mat-icon>
+  <div class="right-menu">
+    <div *ngIf="!(isLoggedIn$ | async); else logOut">
+      <a routerLink="/register">
+        <button mat-raised-button color="warn">Register</button>
+      </a>
+      <a routerLink="/login">
+        <button mat-raised-button color="primary">Login</button>
+      </a>
+    </div>
+    <ng-template #logOut>
+      <a routerLink="/store/user" class="user">
+        <button mat-raised-button style="width: 6rem;" color="primary">
+          {{ 'Hi, ' + (user$ | async).firstName }}
+        </button>
+      </a>
+      <a routerLink="/" class="logOut" (click)="logout()">
+        <button mat-raised-button color="warn">Logout</button>
+      </a>
+    </ng-template>
+
+    <a [routerLink]="['store/products/shopping-cart']" *ngIf="isLoggedIn$ | async">
+      <button mat-icon-button class="shopCart">
+        <mat-icon [matBadge]="cap" matBadgeColor="accent" *ngIf="cap > 0">shopping_cart</mat-icon>
       </button>
-    </mat-form-field>
-  </form>
-
-  <div class="register" *ngIf="!isLogedIn; else userName">
-    <a routerLink="register"
-      ><button mat-raised-button color="warn">Register</button></a
-    >
+    </a>
   </div>
-  <ng-template #userName>
-    <a routerLink="/store/user" class="user"
-      ><button mat-raised-button style="width: 6rem;" color="primary">
-        {{ user?.firstName + " " + user?.lastName }}
-      </button></a
-    >
-  </ng-template>
-
-  <div class="logIn" *ngIf="!isLogedIn; else logOut">
-    <a routerLink="/log-in" (click)="onLogIn()"
-      ><button mat-raised-button color="primary">Log in</button></a
-    >
-  </div>
-  <ng-template #logOut
-    ><a routerLink="/" class="logOut" (click)="onLogOut()"
-      ><button mat-raised-button color="warn">Log out</button></a
-    >
-  </ng-template>
-
-  <a [routerLink]="['store/products/shopping-cart']" *ngIf="isLogedIn"
-    ><button mat-icon-button class="shopCart">
-      <mat-icon matBadge="{{ numOfProd() }}" matBadgeColor="accent"
-        >shopping_cart</mat-icon
-      >
-    </button></a
-  >
 </mat-toolbar>

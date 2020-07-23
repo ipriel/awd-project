@@ -18,8 +18,18 @@ export class ProductService {
     return this.http.get<Product[]>("/api/product/");
   }
 
+  getProductsByCategory(category: string = ""): Observable<Product[]> {
+    return this.http.get<Product[]>(`/api/product/byCategory/${category}`);
+  }
+
   getProductById(id: string): Observable<Product> {
     return this.http.get<Product>(`/api/product/${id}`);
+  }
+
+  getProductCategories() {
+    return this.http.get<{ categories: string[] }>(
+      "/api/product-meta/categories"
+    );
   }
 
   getShoppingCart(): Observable<Product[]> {

@@ -1,0 +1,29 @@
+.full-input {
+    border-radius: 5px;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.full-input.input-light {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.full-input.input-dark {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.full-input > button {
+    border-left: 1px solid rgb(182, 182, 182);
+    border-radius: 0px 4px 4px 0px;
+}
+
+.full-input > input {
+    background-color: transparent;
+    border: none;
+    padding: 6px;
+    outline: none;
+    color: white;
+    font: 1rem sans-serif;
+    flex-grow: 1;
+}
