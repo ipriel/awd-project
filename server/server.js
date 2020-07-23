@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const routes = require('./routes');
 const ws = require('./ws');
 const scraper = require('./scraper');
+const { Product } = require('./models/product.model');
 
 const port = process.env.PORT || 3000;
 
@@ -15,9 +16,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 routes.register(app, __dirname);
 
-const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
-ws.init(server);
-
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -26,6 +24,9 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true
 });
 const db = mongoose.connection;
+
+const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+ws.init(server);
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
