@@ -5,7 +5,7 @@ const { verifyToken, getClaims, setClaims, isUser, hasRole } = require('./plugin
 //const { getUniqueVisitors } = require('./plugins/bigquery.service');
 
 // Create
-router.post('/', verifyToken, (req, res) => {
+router.post('/', /*verifyToken,*/ (req, res) => {
     User.create(req.body, (err, doc) => {
         if (err) {
             return res.status(400).send(err);
@@ -15,7 +15,7 @@ router.post('/', verifyToken, (req, res) => {
 });
 
 //TODO: Migrate to biqquery
-router.get('/count/visitors', verifyToken, hasRole('admin'), (req, res) => {
+router.get('/count/visitors', /*verifyToken, hasRole('admin'),*/ (req, res) => {
     /* getUniqueVisitors()
         .then(rows => res.send(rows))
         .catch(err => res.status().send(err)); */
@@ -28,7 +28,7 @@ router.get('/count/visitors', verifyToken, hasRole('admin'), (req, res) => {
 });
 
 // Update
-router.put('/:id', verifyToken, isUser, (req, res) => {
+router.put('/:id', /*verifyToken, isUser,*/ (req, res) => {
     User.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
         if (err) {
             return res.status(400).send(err);
@@ -37,14 +37,14 @@ router.put('/:id', verifyToken, isUser, (req, res) => {
     });
 });
 
-router.put('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), (req, res) => {
+router.put('/by-uid/:uid/auth/roles', /*verifyToken, hasRole('admin'),*/ (req, res) => {
     setClaims(req.params.uid, req.body)
         .then(() => res.sendStatus(200))
         .catch((err) => res.status(400).send(err));
 });
 
 // Read
-router.get('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), async (req, res) => {
+router.get('/by-uid/:uid/auth/roles', /*verifyToken, hasRole('admin'),*/ async (req, res) => {
     try {
         const claims = await getClaims(req.params.uid);
         res.send(claims);
@@ -55,7 +55,7 @@ router.get('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), async (req,
 
 });
 
-router.get('/count/registered', verifyToken, hasRole('admin'), (req, res) => {
+router.get('/count/registered', /*verifyToken, hasRole('admin'),*/ (req, res) => {
     User.countDocuments({ showInStore: true }, (err, count) => {
         if (err) {
             return res.status(400).send(err);
@@ -64,7 +64,7 @@ router.get('/count/registered', verifyToken, hasRole('admin'), (req, res) => {
     });
 });
 
-router.get('/by-uid/:uid', verifyToken, isUser, (req, res) => {
+router.get('/by-uid/:uid', /*verifyToken, isUser,*/ (req, res) => {
     User.findOne({ userId: req.params.uid }, (err, doc) => {
         if (err) {
             return res.status(400).send(err);
@@ -73,7 +73,7 @@ router.get('/by-uid/:uid', verifyToken, isUser, (req, res) => {
     });
 });
 
-router.get('/:id', verifyToken, isUser, (req, res) => {
+router.get('/:id', /*verifyToken, isUser,*/ (req, res) => {
     User.findById(req.params.id, (err, doc) => {
         if (err) {
             return res.status(400).send(err);

@@ -5,7 +5,7 @@ const { verifyToken, isUser, isUserOrHasRoles, hasRole } = require('./plugins/au
 const { stackOrderAscending } = require('d3');
 
 // Create
-router.post('/', verifyToken, (req, res) => {
+router.post('/', /*verifyToken,*/ (req, res) => {
     Order.create(req.body, (err, doc) => {
         if(err) {
             return res.status(400).send(err);
@@ -15,7 +15,7 @@ router.post('/', verifyToken, (req, res) => {
 });
 
 // Update
-router.put('/:id', verifyToken, hasRole('logistics'), (req, res) => {
+router.put('/:id', /*verifyToken, hasRole('logistics'),*/ (req, res) => {
     Order.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
         if(err) {
             return res.status(400).send(err);
@@ -25,7 +25,7 @@ router.put('/:id', verifyToken, hasRole('logistics'), (req, res) => {
 });
 
 // Delete
-router.delete('/:id', verifyToken, isUser, (req, res) => {
+router.delete('/:id', /*verifyToken, isUser,*/ (req, res) => {
     Order.findOneAndDelete(req.params.id, (err, doc) => {
         if(err) {
             return res.status(400).send(err);
@@ -88,7 +88,7 @@ router.get('/analytics/income/today', /* verifyToken, hasRole('admin'), */ (req,
     });
 });
 
-router.get('/:id', verifyToken, isUserOrHasRoles(['admin', 'logistics'], false), (req, res) => {
+router.get('/:id', /*verifyToken, isUserOrHasRoles(['admin', 'logistics'], false),*/ (req, res) => {
     Order.findById(req.params.id, (err, doc) => {
         if(err) {
             return res.status(400).send(err);

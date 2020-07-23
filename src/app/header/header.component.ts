@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../shared/types';
+import { ProductService } from "../store/product/product.service";
 
 @Component({
   selector: 'app-header',
@@ -29,8 +30,8 @@ export class HeaderComponent implements OnInit {
   }
 
   numOfProd() {
-    if (this.cap > 0)
-      return this.cap;
+    if (this.productService.shoppingCart.size > 0)
+      return this.productService.shoppingCart.size;
   }
 
   onSelect(event: MatAutocompleteSelectedEvent) {
@@ -45,6 +46,6 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private productService: ProductService ,private authService: AuthService, private router: Router) { }
 
 }

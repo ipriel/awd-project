@@ -56,7 +56,7 @@
         <mat-form-field><br>
           <input matInput class="desc" type="text" formControlName="description" [disabled]="!updatingProduct">
         </mat-form-field><br>
-        <!-- Specs: Begin -->
+        <!-- Specs: Begin 
         <div>
           <h2>Specs</h2>
           <div *ngFor="let param of currentProduct.specs | keyvalue">
@@ -100,7 +100,7 @@
             </ng-container>
           </div>
         </div>
-        <!-- Specs: End -->
+        Specs: End -->
         <h3 class="title">State: </h3>
         <mat-checkbox formControlName="showInStore" [disabled]="!updatingProduct">Show in Store</mat-checkbox>
       </form>
