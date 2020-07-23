@@ -15,7 +15,7 @@
     </a>
   </div>
 
-  <app-search-bar type="product" has-button="true" mode="light" (select)="onSelect($event)" (search)="onSearch($event)"></app-search-bar>
+  <app-search-bar type="product" has-button="true" mode="dark" (select)="onSelect($event)" (search)="onSearch($event)"></app-search-bar>
 
   <div class="right-menu">
     <div *ngIf="!(isLoggedIn$ | async); else logOut">

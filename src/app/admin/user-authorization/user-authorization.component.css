@@ -28,3 +28,9 @@ h2 {
 :host {
     background: rgb(33, 34, 43);
 }
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}

@@ -6,6 +6,6 @@
 </div>
 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"  [displayWith]="displayFn" (optionSelected)="selected($event)">
   <mat-option *ngFor="let option of results$ | async" [value]="option">
-    {{option?.firstName ? option?.firstName+' '+option?.lastName : option?.name }}
+    {{option?.firstName ? option?.firstName+' '+option?.lastName+' | '+option?.email : option?.name }}
   </mat-option>
 </mat-autocomplete>

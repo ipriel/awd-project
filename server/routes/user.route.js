@@ -47,7 +47,7 @@ router.put('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), (req, res) 
 router.get('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), async (req, res) => {
     try {
         const claims = await getClaims(req.params.uid);
-        res.send(claims)
+        res.send(claims);
     }
     catch (err) {
         res.status(400).send(err);
