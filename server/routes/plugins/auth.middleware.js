@@ -7,7 +7,7 @@ function verifyToken(req, res, next) {
         console.error('Error: No Auth Header')
         return res.sendStatus(401);
     }
-    
+
     const idToken = authHeader.split(' ')[1];
 
     auth.verifyIdToken(idToken)
@@ -24,10 +24,14 @@ function getClaims(uid) {
     return admin.auth().getUser(uid)
         .then((user) => {
             return user.customClaims;
-        }).catch(function (err) {
-            console.log(err);
-            res.status(401).send(err);
         });
+}
+
+function setClaims(uid, claims) {
+    if(claims)
+        return admin.auth().setCustomUserClaims(uid, claims);
+    else
+        return Promise.reject("Claims argument not defined");
 }
 
 // Helper method to test token claims against multiple roles
@@ -37,12 +41,12 @@ function testClaims(claims, roles, hasAll) {
     if (hasAll) {
         hasClaim = true;
         roles.forEach(role => {
-            hasClaim = hasClaim && claims.includes(role);
+            hasClaim = hasClaim && claims[role];
         });
     } else { // res = false
         let index = 0;
         while (!hasClaim && index < roles.length) {
-            hasClaim = claims.includes(roles[index++]);
+            hasClaim = claims[roles[index++]];
         }
     }
 
@@ -130,6 +134,8 @@ function isUserOrHasRoles(roles, hasAll) {
 
 module.exports = {
     verifyToken,
+    getClaims,
+    setClaims,
     hasRole,
     hasRoles,
     isUser,

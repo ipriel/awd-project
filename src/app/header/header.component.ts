@@ -1,39 +1,50 @@
-import { Component, OnInit, ViewChild, Input } from "@angular/core";
-import { MatMenuTrigger } from "@angular/material/menu";
-import { RouterLink } from "@angular/router";
-import { ProductService } from "../store/product/product.service";
-import { User } from "../shared/types";
+import { Component, OnInit } from '@angular/core';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../shared/types';
 
 @Component({
-  selector: "app-header",
-  templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.css"],
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  isLogedIn: boolean = false;
+  user$: Observable<User>;
+  isLoggedIn$: Observable<boolean>;
+  cap: number = 6;
 
-  // TODO: get from auth service instead?
-  @Input() user: User;
-
-  onLogIn() {
-    this.isLogedIn = true;
+  ngOnInit(): void {
+    this.isLoggedIn$ = this.authService.isLoggedIn();
+    this.user$ = this.isLoggedIn$.pipe(
+      filter((isloggedIn) => isloggedIn),
+      switchMap(()=>this.authService.getUser())
+    );
   }
 
-  onLogOut() {
-    this.isLogedIn = false;
+  logout() {
+    this.authService.logout();
   }
 
   numOfProd() {
-    if (this.productService.shoppingCart.size > 0)
-      return this.productService.shoppingCart.size;
+    if (this.cap > 0)
+      return this.cap;
   }
 
-  constructor(public productService: ProductService) {}
-
-  ngOnInit(): void {
-    this.user = {
-      firstName: "Johnatan",
-      lastName: "Hallel",
-    } as any;
+  onSelect(event: MatAutocompleteSelectedEvent) {
+    const element = event.option.value;
+    this.router.navigate(['/store/products/product-details/', element._id]);
   }
+
+  onSearch(term: string) {
+    console.log(term);
+    this.router.navigate(['/store/products'], {
+      state: { term }
+    });
+  }
+
+  constructor(private authService: AuthService, private router: Router) { }
+
 }

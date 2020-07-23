@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models/user.model');
-const { verifyToken, isUser, hasRole } = require('./plugins/auth.middleware');
+const { verifyToken, getClaims, setClaims, isUser, hasRole } = require('./plugins/auth.middleware');
 //const { getUniqueVisitors } = require('./plugins/bigquery.service');
 
 // Create
@@ -23,7 +23,7 @@ router.get('/count/visitors', verifyToken, hasRole('admin'), (req, res) => {
         if (err) {
             return res.status(400).send(err);
         }
-        res.send({data: Math.round(Math.random() * count)});
+        res.send({ data: Math.round(Math.random() * count) });
     });
 });
 
@@ -37,13 +37,39 @@ router.put('/:id', verifyToken, isUser, (req, res) => {
     });
 });
 
+router.put('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), (req, res) => {
+    setClaims(req.params.uid, req.body)
+        .then(() => res.sendStatus(200))
+        .catch((err) => res.status(400).send(err));
+});
+
 // Read
+router.get('/by-uid/:uid/auth/roles', verifyToken, hasRole('admin'), async (req, res) => {
+    try {
+        const claims = await getClaims(req.params.uid);
+        res.send(claims)
+    }
+    catch (err) {
+        res.status(400).send(err);
+    }
+
+});
+
 router.get('/count/registered', verifyToken, hasRole('admin'), (req, res) => {
     User.countDocuments({ showInStore: true }, (err, count) => {
         if (err) {
             return res.status(400).send(err);
         }
-        res.send({data: count});
+        res.send({ data: count });
+    });
+});
+
+router.get('/by-uid/:uid', verifyToken, isUser, (req, res) => {
+    User.findOne({ userId: req.params.uid }, (err, doc) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.send(doc);
     });
 });
 
