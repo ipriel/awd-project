@@ -10,6 +10,7 @@ import { BarDirective } from './bar.directive';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsEditorComponent } from './products-editor/products-editor.component';
 import { UserAuthorizationComponent } from './user-authorization/user-authorization.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { UserAuthorizationComponent } from './user-authorization/user-authorizat
     DashboardComponent,
     ProductsEditorComponent,
     BarDirective,
-    UserAuthorizationComponent
+    UserAuthorizationComponent,
+    NavbarComponent
   ]
 })
 export class AdminModule { }
