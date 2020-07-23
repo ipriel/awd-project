@@ -1,3 +1,5 @@
+<admin-navbar></admin-navbar>
+<br>
 <mat-grid-list class="my-grid" cols="6" rowHeight="100px" padding="10px">
   <mat-grid-tile class="my-tile" colspan="3">
     <mat-form-field appearance="fill">
@@ -18,7 +20,10 @@
     </mat-form-field>
   </mat-grid-tile>
 </mat-grid-list>
+<br>
 <mat-divider></mat-divider>
+<br>
+<br>
 <mat-card id="shopProduct" class="product">
   <ng-container *ngIf="currentProduct$ | async as currentProduct">
     <mat-card-content>
@@ -51,7 +56,7 @@
         <mat-form-field><br>
           <input matInput class="desc" type="text" formControlName="description" [disabled]="!updatingProduct">
         </mat-form-field><br>
-        <!-- Specs: Begin -->
+        <!-- Specs: Begin 
         <div>
           <h2>Specs</h2>
           <div *ngFor="let param of currentProduct.specs | keyvalue">
@@ -95,7 +100,7 @@
             </ng-container>
           </div>
         </div>
-        <!-- Specs: End -->
+        Specs: End -->
         <h3 class="title">State: </h3>
         <mat-checkbox formControlName="showInStore" [disabled]="!updatingProduct">Show in Store</mat-checkbox>
       </form>

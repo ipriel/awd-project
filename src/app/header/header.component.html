@@ -15,7 +15,7 @@
     </a>
   </div>
 
-  <app-search-bar type="product" has-button="true" mode="light" (select)="onSelect($event)" (search)="onSearch($event)"></app-search-bar>
+  <app-search-bar type="product" has-button="true" mode="dark" (select)="onSelect($event)" (search)="onSearch($event)"></app-search-bar>
 
   <div class="right-menu">
     <div *ngIf="!(isLoggedIn$ | async); else logOut">
@@ -37,9 +37,9 @@
       </a>
     </ng-template>
 
-    <a [routerLink]="['store/products/shopping-cart']" *ngIf="isLoggedIn$ | async">
+    <a [routerLink]="['store/products/shopping-cart']">
       <button mat-icon-button class="shopCart">
-        <mat-icon [matBadge]="cap" matBadgeColor="accent" *ngIf="cap > 0">shopping_cart</mat-icon>
+        <mat-icon [matBadge]="numOfProd()" matBadgeColor="accent">shopping_cart</mat-icon>
       </button>
     </a>
   </div>

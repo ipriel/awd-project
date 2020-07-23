@@ -5,7 +5,7 @@ const { verifyToken, hasRole } = require("./plugins/auth.middleware");
 const { send } = require("process");
 
 // Update
-router.put("/pull-stock", verifyToken, hasRole("logistics"), (req, res) => {
+router.put("/pull-stock", /*verifyToken, hasRole("logistics"),*/ (req, res) => {
   Product.updateMany(
     {
       _id: { $in: req.body.ids },
@@ -24,7 +24,7 @@ router.put("/pull-stock", verifyToken, hasRole("logistics"), (req, res) => {
   );
 });
 
-router.put("/:id/add-stock", verifyToken, hasRole("logistics"), (req, res) => {
+router.put("/:id/add-stock", /*verifyToken, hasRole("logistics"),*/ (req, res) => {
   Product.findByIdAndUpdate(
     req.params.id,
     { $inc: { quantity: req.body.count } },
@@ -36,7 +36,7 @@ router.put("/:id/add-stock", verifyToken, hasRole("logistics"), (req, res) => {
   );
 });
 
-router.put("/:id", verifyToken, hasRole("admin"), (req, res) => {
+router.put("/:id", /*verifyToken, hasRole("admin"),*/ (req, res) => {
   Product.findByIdAndUpdate(req.params.id, req.body, (err, doc) => {
     if (err) {
       return res.status(400).send(err);
@@ -46,7 +46,7 @@ router.put("/:id", verifyToken, hasRole("admin"), (req, res) => {
 });
 
 // Delete
-router.delete("/:id", verifyToken, hasRole("admin"), (req, res) => {
+router.delete("/:id", /*verifyToken, hasRole("admin"),*/ (req, res) => {
   Product.findOneAndDelete({ _id: req.params.id }, (err, doc) => {
     if (err) return res.status(400).send(err);
 
@@ -55,7 +55,7 @@ router.delete("/:id", verifyToken, hasRole("admin"), (req, res) => {
 });
 
 // Create
-router.post('/', verifyToken, hasRole('admin'), (req, res) => {
+router.post('/', /*verifyToken, hasRole('admin'),*/ (req, res) => {
   Product.create(req.body, (err, doc) => {
     if (err) {
       return res.status(400).send(err);
@@ -65,7 +65,7 @@ router.post('/', verifyToken, hasRole('admin'), (req, res) => {
 });
 
 // Read
-router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
+router.get('/count', /*verifyToken, hasRole('admin'),*/ (req, res) => {
     Product.countDocuments({showInStore: true}, (err, count) => {
         if (err) {
             return res.status(400).send(err);
@@ -75,7 +75,7 @@ router.get('/count', verifyToken, hasRole('admin'), (req, res) => {
 
 });
 
-router.get("/select", verifyToken, hasRole("admin"), (req, res) => {
+router.get("/select", /*verifyToken, hasRole("admin"),*/ (req, res) => {
   Product.find({}, "_id name", (err, products) => {
     if (err) {
       console.error(err);

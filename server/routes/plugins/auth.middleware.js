@@ -21,7 +21,7 @@ function verifyToken(req, res, next) {
 }
 
 function getClaims(uid) {
-    return admin.auth().getUser(uid)
+    return auth.getUser(uid)
         .then((user) => {
             return user.customClaims;
         });
@@ -29,7 +29,7 @@ function getClaims(uid) {
 
 function setClaims(uid, claims) {
     if(claims)
-        return admin.auth().setCustomUserClaims(uid, claims);
+        return auth.setCustomUserClaims(uid, claims);
     else
         return Promise.reject("Claims argument not defined");
 }

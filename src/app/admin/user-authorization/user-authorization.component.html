@@ -1,0 +1,24 @@
+<admin-navbar></admin-navbar>
+<div class="content">
+  <br>
+  <mat-card class="center">
+    <h2>Search User</h2>
+    <div class="search-bar">
+        <h4>Name or Email: </h4>
+        <app-search-bar type="user" mode="light" (select)="onSelect($event)"></app-search-bar>
+    </div>
+  </mat-card>
+  <br>
+  <mat-card class="center" *ngIf="isUserSelected">
+    <h2>Edit User Authorizations</h2>
+    <section>
+      <form [formGroup]="roleForm">
+        <mat-checkbox class="box" color="primary" formControlName="admin">Admin</mat-checkbox>
+        <mat-checkbox class="box" color="accent" formControlName="logisticsDelivery">Logistics Delivery</mat-checkbox>
+        <mat-checkbox class="box" color="warn" formControlName="logisticsWarehouse">Logistics Warehouse</mat-checkbox>
+      </form>
+    </section>
+    <br>
+    <button mat-flat-button color="primary" (click)="updateAuthorizations()">Update</button>
+  </mat-card>
+</div>

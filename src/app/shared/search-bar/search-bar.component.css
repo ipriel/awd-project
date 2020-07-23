@@ -5,12 +5,13 @@
     align-items: center;
 }
 
-.full-input.input-light {
+.full-input.input-dark {
     background-color: rgba(255,255,255,0.2);
 }
 
-.full-input.input-dark {
-    background-color: rgba(0,0,0,0.2);
+.full-input.input-light {
+    background-color: white;
+    border: 1px solid rgb(182, 182, 182);
 }
 
 .full-input > button {
@@ -23,7 +24,14 @@
     border: none;
     padding: 6px;
     outline: none;
-    color: white;
     font: 1rem sans-serif;
     flex-grow: 1;
+}
+
+.full-input.input-dark > input {
+    color: white;
+}
+
+.full-input.input-light > input {
+    color: black;
 }

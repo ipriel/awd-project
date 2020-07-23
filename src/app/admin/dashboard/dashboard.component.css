@@ -2,7 +2,6 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.8);
     justify-items: center;
 }
 
@@ -10,7 +9,7 @@
     width: 60%;
     text-align: center;
     border: 1px solid rgba(0, 0, 0, 0.3);
-    color: white;
+    color: whitesmoke;
 }
 
 .income-icon {
@@ -47,4 +46,26 @@
 
 .online-card {
     background-color: lightcoral;
+}
+
+
+svg text.label {
+    fill: black;
+    font: 15px;
+    font-weight: 400;
+    text-anchor: middle;
+  }
+
+.bar-div {
+    text-align: center;
+    align-items: center;
+}
+.bar-chart {
+    width: 50%;
+    margin: auto;
+    background-color: rgb(245, 234, 209)
+}
+
+  :host {
+    background: rgb(33, 34, 43);
 }

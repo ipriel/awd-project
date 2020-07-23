@@ -35,6 +35,10 @@ export class BarDirective {
     this.draw();
   }
 
+  ngOnChanges() {
+    this.draw();
+  }
+
   private resize() {
     this.setSVGDimensions();
     this.setAxisScales();

@@ -1,5 +1,6 @@
 const { Product } = require('../../models/product.model');
 const { ProductMeta } = require('../../models/product-meta.model');
+const { User } = require('../../models/user.model');
 const { arrayFilterUnique } = require('../../scraper/util');
 
 function filterResults() {
@@ -29,7 +30,7 @@ module.exports = {
                     { 'email': regex }
                 ]
             });
-
+            
             cb(res);
         });
     }

@@ -68,7 +68,6 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   get colorMode() {
-    console.log(this.mode);
     return {
       'input-light': this.mode === "light",
       'input-dark': this.mode === "dark"

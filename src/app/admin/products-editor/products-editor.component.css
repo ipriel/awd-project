@@ -3,6 +3,11 @@
     margin: auto;
 }
 
+.select {
+    color: whitesmoke;
+    background-color: whitesmoke;
+}
+
 .product-header {
     font-weight: bold;
     text-align: center;
